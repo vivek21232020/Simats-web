@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMATS | Academic Toolkit</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    <div class="bg-glow glow-3"></div>
+
+    <!-- Floating particles -->
+    <div class="particles" id="particles"></div>
+
+    <div class="app-container">
+        
+        <div class="sidebar-wrapper">
+            <nav class="floating-sidebar">
+                <div class="brand-icon">
+                    <img src="logosimats.png" alt="SIMATS Logo" class="college-logo-small">
+                </div>
+                
+                <div class="nav-items">
+                    <button class="side-btn active" data-target="home-section">
+                        <i class="fa-solid fa-house"></i>
+                        <span class="nav-text">Home</span>
+                    </button>
+                    <button class="side-btn" data-target="cgpa-section">
+                        <i class="fa-solid fa-calculator"></i>
+                        <span class="nav-text">CGPA Calculator</span>
+                    </button>
+                    <button class="side-btn" data-target="attendance-section">
+                        <i class="fa-solid fa-calendar-check"></i>
+                        <span class="nav-text">Attendance</span>
+                    </button>
+                    <button class="side-btn" data-target="bunk-section">
+                        <i class="fa-solid fa-person-running"></i>
+                        <span class="nav-text">Bunk Calc</span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+
+        <main class="main-content">
+            
+            <!-- ═══ HOME SECTION ═══ -->
+            <section id="home-section" class="tool-section active-section">
+                <div class="glass-card hero-card">
+
+                    <!-- Decorative rings -->
+                    <div class="hero-ring ring-1"></div>
+                    <div class="hero-ring ring-2"></div>
+                    <div class="hero-ring ring-3"></div>
+
+                    <!-- Floating orbs inside hero -->
+                    <div class="hero-orb orb-a"></div>
+                    <div class="hero-orb orb-b"></div>
+                    <div class="hero-orb orb-c"></div>
+
+                    <div class="hero-content">
+                        <div class="logo-wrapper">
+                            <div class="logo-glow-ring"></div>
+                            <img src="logosimats.png" alt="SIMATS Engineering" class="hero-logo static-logo">
+                        </div>
+                        
+                        <h1 class="gradient-text">SIMATS ACADEMIC TOOLKIT</h1>
+                        <p class="tagline"><i class="fa-solid fa-award"></i> Engineering Excellence <i class="fa-solid fa-award"></i></p>
+                        <p class="subtitle">Welcome to the official utility dashboard for SIMATS Engineering students. Seamlessly calculate your CGPA, predict future academic targets, and ensure your attendance meets the strict 80% criteria.</p>
+                        
+                        <!-- Stats row -->
+                        <div class="hero-stats">
+                            <div class="stat-pill">
+                                <i class="fa-solid fa-calculator"></i>
+                                <span>CGPA Calculator</span>
+                            </div>
+                            <div class="stat-divider"></div>
+                            <div class="stat-pill">
+                                <i class="fa-solid fa-calendar-check"></i>
+                                <span>Attendance Tracker</span>
+                            </div>
+                            <div class="stat-divider"></div>
+                            <div class="stat-pill">
+                                <i class="fa-solid fa-person-running"></i>
+                                <span>Bunk Planner</span>
+                            </div>
+                        </div>
+
+                        <div class="quick-actions">
+                            <button class="btn primary-btn pulse-btn" id="get-started-btn">
+                                <i class="fa-solid fa-rocket"></i> Get Started
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ CGPA SECTION ═══ -->
+            <section id="cgpa-section" class="tool-section">
+                <div class="split-layout">
+                    <div class="glass-card panel-left interactive-glow">
+                        <div class="card-header">
+                            <div class="icon-box green"><i class="fa-solid fa-calculator"></i></div>
+                            <div>
+                                <h3>Grade Input</h3>
+                                <p>Enter number of subjects for each grade</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grade-grid">
+                            <div class="grade-input-box"><div class="grade-label"><span class="badge s-badge">S</span> Grade S <span class="sub-text">Subjects</span></div><input type="number" id="grade-s" placeholder="0" min="0"></div>
+                            <div class="grade-input-box"><div class="grade-label"><span class="badge a-badge">A</span> Grade A <span class="sub-text">Subjects</span></div><input type="number" id="grade-a" placeholder="0" min="0"></div>
+                            <div class="grade-input-box"><div class="grade-label"><span class="badge b-badge">B</span> Grade B <span class="sub-text">Subjects</span></div><input type="number" id="grade-b" placeholder="0" min="0"></div>
+                            <div class="grade-input-box"><div class="grade-label"><span class="badge c-badge">C</span> Grade C <span class="sub-text">Subjects</span></div><input type="number" id="grade-c" placeholder="0" min="0"></div>
+                            <div class="grade-input-box"><div class="grade-label"><span class="badge d-badge">D</span> Grade D <span class="sub-text">Subjects</span></div><input type="number" id="grade-d" placeholder="0" min="0"></div>
+                            <div class="grade-input-box"><div class="grade-label"><span class="badge e-badge">E</span> Grade E <span class="sub-text">Subjects</span></div><input type="number" id="grade-e" placeholder="0" min="0"></div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button id="calc-cgpa" class="btn primary-btn"><i class="fa-solid fa-bolt"></i> Calculate CGPA</button>
+                            <button id="reset-cgpa" class="btn outline-btn"><i class="fa-solid fa-rotate-right"></i> Reset</button>
+                        </div>
+                    </div>
+
+                    <div class="glass-card result-panel interactive-glow">
+                        <div id="cgpa-empty-state" class="empty-state">
+                            <div class="icon-box large"><i class="fa-solid fa-chart-pie"></i></div>
+                            <h3>Ready to Calculate</h3>
+                            <p>Enter your grades to generate your academic performance report.</p>
+                        </div>
+                        <div id="cgpa-result-state" class="result-state hidden">
+                            <h3 class="result-title">Your CGPA</h3>
+                            <p id="cgpa-desc" class="result-desc"></p>
+                            <div id="cgpa-result" class="huge-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ ATTENDANCE SECTION ═══ -->
+            <section id="attendance-section" class="tool-section">
+                <div class="split-layout">
+                    <div class="glass-card panel-left interactive-glow">
+                        <div class="card-header">
+                            <div class="icon-box green"><i class="fa-solid fa-calendar-check"></i></div>
+                            <div>
+                                <h3>Attendance Tracker</h3>
+                                <p>Maintain your strict 80% requirement.</p>
+                            </div>
+                        </div>
+                        <div class="input-container">
+                            <div class="input-group">
+                                <label>Total Classes Conducted</label>
+                                <input type="number" id="total-classes" placeholder="e.g. 50">
+                            </div>
+                            <div class="input-group">
+                                <label>Total Classes Attended</label>
+                                <input type="number" id="attended-classes" placeholder="e.g. 42">
+                            </div>
+                        </div>
+                        <button id="calc-attendance" class="btn primary-btn full-width"><i class="fa-solid fa-bolt"></i> Check Status</button>
+                    </div>
+
+                    <div class="glass-card result-panel interactive-glow">
+                        <div id="att-empty-state" class="empty-state">
+                            <div class="icon-box large"><i class="fa-solid fa-percent"></i></div>
+                            <h3>Awaiting Input</h3>
+                            <p>Enter your class numbers to see your current standing.</p>
+                        </div>
+                        <div id="att-result-state" class="result-state hidden">
+                            <h3 class="result-title">Current Attendance</h3>
+                            <div id="attendance-result" class="huge-result"></div>
+                            <p id="att-desc" class="result-desc"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ BUNK SECTION ═══ -->
+            <section id="bunk-section" class="tool-section">
+                <div class="split-layout">
+                    <div class="glass-card panel-left interactive-glow">
+                        <div class="card-header">
+                            <div class="icon-box orange"><i class="fa-solid fa-person-running"></i></div>
+                            <div>
+                                <h3>Bunk Calculator</h3>
+                                <p>Plan your skips wisely to stay above 80%.</p>
+                            </div>
+                        </div>
+                        <div class="input-container">
+                            <div class="input-group">
+                                <label>Current Total Classes</label>
+                                <input type="number" id="bunk-total" placeholder="e.g. 50">
+                            </div>
+                            <div class="input-group">
+                                <label>Current Attended Classes</label>
+                                <input type="number" id="bunk-attended" placeholder="e.g. 40">
+                            </div>
+                        </div>
+                        <button id="calc-bunk" class="btn primary-btn full-width"><i class="fa-solid fa-bolt"></i> Calculate Safe Bunks</button>
+                    </div>
+
+                    <div class="glass-card result-panel interactive-glow">
+                        <div id="bunk-empty-state" class="empty-state">
+                            <div class="icon-box large"><i class="fa-solid fa-bed"></i></div>
+                            <h3>Awaiting Input</h3>
+                            <p>Find out if you can afford to miss your next lecture.</p>
+                        </div>
+                        <div id="bunk-result-state" class="result-state hidden">
+                            <h3 id="bunk-title" class="result-title">Bunk Analysis</h3>
+                            <div id="bunk-huge" class="huge-result"></div>
+                            <p id="bunk-desc" class="result-desc"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

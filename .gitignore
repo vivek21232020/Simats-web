@@ -1,0 +1,79 @@
+# ====================================================================
+# Dependencies
+# ====================================================================
+node_modules/
+jspm_packages/
+web_modules/
+
+# ====================================================================
+# Build Outputs and Distributions
+# ====================================================================
+dist/
+build/
+out/
+.next/
+.nuxt/
+.docusaurus/
+.svelte-kit/
+.cache/
+.turbo/
+.parcel-cache/
+
+# TypeScript compilation info
+*.tsbuildinfo
+
+# ====================================================================
+# Logs and Diagnostics
+# ====================================================================
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ====================================================================
+# Environment Variables & Security Secrets
+# ====================================================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.key
+*.cert
+*.secret
+
+# ====================================================================
+# Testing and Coverage
+# ====================================================================
+coverage/
+.nyc_output/
+.jest/
+playwright-report/
+test-results/
+
+# ====================================================================
+# Operating System & IDE Files
+# ====================================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# IDEs / Editors
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
