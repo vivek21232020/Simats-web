@@ -551,6 +551,37 @@ input[type="number"]:hover, input[type="number"]:focus {
 .hidden { display: none !important; }
 
 /* ══════════════════════════════════════
+   BUNK CALCULATOR STYLING
+══════════════════════════════════════ */
+.bunk-attendance-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 1.8rem;
+    padding: 12px 18px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(16, 185, 129, 0.15);
+}
+
+.attendance-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.attendance-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #10b981;
+    font-family: 'Courier New', monospace;
+}
+
+/* ══════════════════════════════════════
    KEYFRAMES
 ══════════════════════════════════════ */
 @keyframes fadeUp {

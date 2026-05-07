@@ -147,26 +147,47 @@ document.getElementById('calc-bunk').addEventListener('click', () => {
         return;
     }
 
-    const currentPct = (attended / total) * 100;
+    const currentPct = ((attended / total) * 100).toFixed(2);
+    const safeBunks = Math.max(0, Math.floor((attended - 0.8 * total) / 0.8));
 
     document.getElementById('bunk-empty-state').classList.add('hidden');
     const rs = document.getElementById('bunk-result-state');
     rs.classList.remove('hidden');
     rs.style.animation = 'none'; rs.offsetHeight; rs.style.animation = '';
 
-    if (currentPct < 80) {
-        const needed = Math.ceil(0.8 * total) - attended;
-        document.getElementById('bunk-title').textContent = 'Classes Needed';
-        document.getElementById('bunk-huge').textContent = needed;
-        document.getElementById('bunk-desc').textContent = `⚠️ You must attend ${needed} more consecutive classes before bunking.`;
-        document.getElementById('bunk-huge').style.color = '#ea580c';
+    // Update result card styling based on attendance
+    const resultCard = rs.closest('.result-panel');
+    if (currentPct >= 80) {
+        resultCard.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+        resultCard.style.background = 'linear-gradient(160deg, #f0fdf4, #e8f8f5)';
     } else {
-        const safeBunks = Math.floor((attended - 0.8 * total) / (1 - 0.8));
-        document.getElementById('bunk-title').textContent = 'Safe Bunks';
+        resultCard.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+        resultCard.style.background = 'linear-gradient(160deg, #fef2f2, #fff5f5)';
+    }
+
+    // Update current attendance display
+    const attendanceSpan = document.getElementById('bunk-current-attendance');
+    attendanceSpan.textContent = currentPct + '%';
+    attendanceSpan.style.color = currentPct >= 80 ? '#10b981' : '#ef4444';
+
+    if (currentPct >= 80) {
+        document.getElementById('bunk-title').textContent = 'Safe Bunks Available';
         document.getElementById('bunk-huge').textContent = safeBunks;
-        document.getElementById('bunk-desc').textContent = safeBunks > 0
-            ? `🎉 You can safely skip ${safeBunks} class${safeBunks !== 1 ? 'es' : ''} and stay above 80%.`
-            : `⚠️ You're exactly at 80%. Don't skip any more classes!`;
-        document.getElementById('bunk-huge').style.color = safeBunks > 0 ? '#10b981' : '#f59e0b';
+        document.getElementById('bunk-huge').style.color = '#10b981';
+        
+        if (safeBunks > 0) {
+            document.getElementById('bunk-desc').textContent = `You can safely skip ${safeBunks} more class${safeBunks !== 1 ? 'es' : ''} while maintaining 80% attendance.`;
+            document.getElementById('bunk-desc').style.color = '#059669';
+        } else {
+            document.getElementById('bunk-desc').textContent = `You're right at 80% attendance. Attend all remaining classes to maintain your standing.`;
+            document.getElementById('bunk-desc').style.color = '#f59e0b';
+        }
+    } else {
+        document.getElementById('bunk-title').textContent = 'Below Minimum Attendance';
+        document.getElementById('bunk-huge').textContent = '0';
+        document.getElementById('bunk-huge').style.color = '#ef4444';
+        const neededAttendance = Math.ceil(0.8 * total) - attended;
+        document.getElementById('bunk-desc').textContent = `Attend ${neededAttendance} more class${neededAttendance !== 1 ? 'es' : ''} to reach 80% before considering any bunks.`;
+        document.getElementById('bunk-desc').style.color = '#dc2626';
     }
 });
