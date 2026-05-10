@@ -225,3 +225,59 @@ document.querySelectorAll('.portal-btn, .food-btn').forEach(btn => {
         setTimeout(() => ripple.remove(), 600);
     });
 });
+
+/* ══════════════════════════════════════
+   THEME TOGGLE
+══════════════════════════════════════ */
+const htmlElement = document.documentElement;
+const themeToggles = [
+    document.getElementById('theme-toggle-mobile'),
+    document.getElementById('theme-toggle-sidebar'),
+    document.getElementById('bnav-theme-toggle')
+];
+const themeIcons = [
+    document.getElementById('theme-icon-mobile'),
+    document.getElementById('theme-icon-sidebar')
+];
+
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    htmlElement.setAttribute('data-theme', savedTheme);
+    updateThemeIcons(savedTheme);
+}
+
+function toggleTheme() {
+    const currentTheme = htmlElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    
+    htmlElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateThemeIcons(newTheme);
+}
+
+function updateThemeIcons(theme) {
+    themeIcons.forEach(icon => {
+        if (icon) {
+            icon.classList.remove('fa-moon', 'fa-sun');
+            icon.classList.add(theme === 'dark' ? 'fa-sun' : 'fa-moon');
+        }
+    });
+    
+    const themeLabel = document.getElementById('theme-drawer-label');
+    if (themeLabel) {
+        themeLabel.textContent = theme === 'dark' ? 'Light Mode' : 'Dark Mode';
+    }
+    
+    const togglePill = document.getElementById('theme-pill');
+    if (togglePill) {
+        togglePill.classList.toggle('on', theme === 'dark');
+    }
+}
+
+themeToggles.forEach(toggle => {
+    if (toggle) {
+        toggle.addEventListener('click', toggleTheme);
+    }
+});
+
+initTheme();
