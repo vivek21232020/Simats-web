@@ -28,20 +28,54 @@ createParticles();
 const sideButtons = document.querySelectorAll('.side-btn');
 const toolSections = document.querySelectorAll('.tool-section');
 
+function switchSection(sectionId) {
+    const targetBtn = document.querySelector(`[data-target="${sectionId}"]`);
+    if (!targetBtn) return;
+    
+    sideButtons.forEach(b => b.classList.remove('active'));
+    targetBtn.classList.add('active');
+    
+    /* Update bottom nav active state */
+    const bnavButtons = document.querySelectorAll('.bnav-btn[data-target]');
+    bnavButtons.forEach(btn => btn.classList.remove('active'));
+    const activeBnavBtn = document.querySelector(`.bnav-btn[data-target="${sectionId}"]`);
+    if (activeBnavBtn) {
+        activeBnavBtn.classList.add('active');
+    }
+    
+    toolSections.forEach(s => {
+        s.classList.remove('active-section');
+    });
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.classList.add('active-section');
+    }
+    
+    localStorage.setItem('activeSection', sectionId);
+}
+
 sideButtons.forEach(btn => {
     btn.addEventListener('click', () => {
         const target = btn.dataset.target;
+        switchSection(target);
+    });
+});
 
-        sideButtons.forEach(b => b.classList.remove('active'));
+/* Restore previous section on page load */
+window.addEventListener('DOMContentLoaded', () => {
+    const savedSection = localStorage.getItem('activeSection') || 'home-section';
+    switchSection(savedSection);
+});
+
+/* Bottom nav buttons */
+const bnavButtons = document.querySelectorAll('.bnav-btn[data-target]');
+bnavButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const target = btn.dataset.target;
+        switchSection(target);
+        
+        bnavButtons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-
-        toolSections.forEach(s => {
-            s.classList.remove('active-section');
-        });
-        const targetSection = document.getElementById(target);
-        if (targetSection) {
-            targetSection.classList.add('active-section');
-        }
     });
 });
 
