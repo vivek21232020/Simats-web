@@ -92,6 +92,72 @@ if (getStartedBtn) {
    CGPA CALCULATOR
    Grade points: S=10, A=9, B=8, C=7, D=6, E=5
 ══════════════════════════════════════ */
+let gradeChart = null;
+
+function updateGradeChart(grades) {
+    const chartCanvas = document.getElementById('grade-distribution-chart');
+    if (!chartCanvas) return;
+    
+    if (gradeChart) {
+        gradeChart.destroy();
+    }
+    
+    const ctx = chartCanvas.getContext('2d');
+    gradeChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['S (10)', 'A (9)', 'B (8)', 'C (7)', 'D (6)', 'E (5)'],
+            datasets: [{
+                label: 'Subjects',
+                data: [grades.s.val, grades.a.val, grades.b.val, grades.c.val, grades.d.val, grades.e.val],
+                backgroundColor: ['#10b981', '#3b82f6', '#6366f1', '#f59e0b', '#ea580c', '#ef4444'],
+                borderRadius: 8,
+                hoverBackgroundColor: ['#059669', '#1d4ed8', '#4f46e5', '#d97706', '#dc2626', '#dc2626']
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                x: { beginAtZero: true, max: 10 }
+            }
+        }
+    });
+}
+
+function updateGradeStats(grades) {
+    const gradeValues = Object.values(grades).map(g => g.val);
+    const totalSubjects = gradeValues.reduce((a, b) => a + b, 0);
+    
+    const maxGrades = [
+        { grade: 'S', val: grades.s.val, weight: 10 },
+        { grade: 'A', val: grades.a.val, weight: 9 },
+        { grade: 'B', val: grades.b.val, weight: 8 },
+        { grade: 'C', val: grades.c.val, weight: 7 },
+        { grade: 'D', val: grades.d.val, weight: 6 },
+        { grade: 'E', val: grades.e.val, weight: 5 },
+    ];
+    
+    let highestGrade = '--';
+    for (let i = 0; i < maxGrades.length; i++) {
+        if (maxGrades[i].val > 0) {
+            highestGrade = maxGrades[i].grade;
+            break;
+        }
+    }
+    
+    const totalPoints = Object.values(grades).reduce((s, g) => s + g.val * g.pts, 0);
+    const avgGrade = totalSubjects > 0 ? (totalPoints / totalSubjects).toFixed(2) : '--';
+    
+    document.getElementById('total-subjects').textContent = totalSubjects;
+    document.getElementById('highest-grade').textContent = highestGrade;
+    document.getElementById('avg-grade').textContent = avgGrade;
+}
+
 document.getElementById('calc-cgpa').addEventListener('click', () => {
     const grades = {
         s: { val: parseInt(document.getElementById('grade-s').value) || 0, pts: 10 },
@@ -118,10 +184,17 @@ document.getElementById('calc-cgpa').addEventListener('click', () => {
 
     document.getElementById('cgpa-result').textContent = cgpa;
     document.getElementById('cgpa-desc').textContent = desc;
+    
+    const barWidth = (cgpa / 10) * 100;
+    document.getElementById('cgpa-bar').style.width = barWidth + '%';
 
     document.getElementById('cgpa-empty-state').classList.add('hidden');
     const resultState = document.getElementById('cgpa-result-state');
     resultState.classList.remove('hidden');
+    
+    updateGradeChart(grades);
+    updateGradeStats(grades);
+    
     // Re-trigger animation
     resultState.style.animation = 'none';
     resultState.offsetHeight;
@@ -134,6 +207,10 @@ document.getElementById('reset-cgpa').addEventListener('click', () => {
     });
     document.getElementById('cgpa-empty-state').classList.remove('hidden');
     document.getElementById('cgpa-result-state').classList.add('hidden');
+    if (gradeChart) {
+        gradeChart.destroy();
+        gradeChart = null;
+    }
 });
 
 /* ══════════════════════════════════════
@@ -287,6 +364,13 @@ function toggleTheme() {
     htmlElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
     updateThemeIcons(newTheme);
+    
+    if (gradeChart) {
+        const colors = getThemeColors();
+        gradeChart.options.plugins.legend.labels.color = colors.textColor;
+        gradeChart.options.plugins.tooltip.backgroundColor = 'rgba(0,0,0,0.8)';
+        gradeChart.update();
+    }
 }
 
 function updateThemeIcons(theme) {
