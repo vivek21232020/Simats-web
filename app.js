@@ -191,3 +191,37 @@ document.getElementById('calc-bunk').addEventListener('click', () => {
         document.getElementById('bunk-desc').style.color = '#dc2626';
     }
 });
+
+/* ══════════════════════════════════════
+   EXTERNAL LINK BUTTONS — RIPPLE EFFECT
+══════════════════════════════════════ */
+
+/* Inject ripple keyframe once */
+(function () {
+    const s = document.createElement('style');
+    s.textContent = `@keyframes rippleAnim { to { transform: scale(2.8); opacity: 0; } }`;
+    document.head.appendChild(s);
+})();
+
+document.querySelectorAll('.portal-btn, .food-btn').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+        const ripple = document.createElement('span');
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        ripple.style.cssText = `
+            position: absolute;
+            width: ${size}px;
+            height: ${size}px;
+            left: ${e.clientX - rect.left - size / 2}px;
+            top: ${e.clientY - rect.top - size / 2}px;
+            background: rgba(255, 255, 255, 0.38);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: rippleAnim 0.55s linear forwards;
+            pointer-events: none;
+            z-index: 5;
+        `;
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+    });
+});

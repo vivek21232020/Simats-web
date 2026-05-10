@@ -138,12 +138,139 @@ body {
                 box-shadow 0.3s ease,
                 transform 0.1s ease;
 }
-.side-btn i { width: 50px; font-size: 1.15rem; color: var(--text-muted); flex-shrink: 0; text-align: center; transition: color 0.3s ease; }
+.side-btn i { width: 50px; font-size: 1.15rem; color: var(--text-muted); flex-shrink: 0; text-align: center; transition: color 0.3s ease, transform 0.3s ease, filter 0.3s ease; }
 .side-btn .nav-text { font-weight: 600; font-size: 0.9rem; color: var(--primary); opacity: 0; transform: translateX(-10px); transition: all 0.3s ease 0.1s; padding-right: 22px; }
 .side-btn:hover, .side-btn.active { width: 210px; background: #fff; box-shadow: 0 8px 24px rgba(16,185,129,0.18); z-index: 10; }
 .side-btn:hover i, .side-btn.active i { color: var(--primary); }
 .side-btn:hover .nav-text, .side-btn.active .nav-text { opacity: 1; transform: translateX(0); }
 .side-btn:active { transform: scale(0.95); }
+
+/* ══════════════════════════════════════
+   NAV DIVIDER
+══════════════════════════════════════ */
+.nav-divider {
+    width: 36px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(16,185,129,0.3), transparent);
+    border-radius: 2px;
+    margin: 0.1rem 0;
+}
+
+/* ══════════════════════════════════════
+   ARMS PORTAL BUTTON
+══════════════════════════════════════ */
+a.side-btn {
+    text-decoration: none;
+}
+
+.side-btn.portal-btn {
+    animation: subtleFloat 3.5s ease-in-out infinite alternate;
+}
+
+.side-btn.portal-btn i {
+    background: linear-gradient(135deg, #6366f1, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.side-btn.portal-btn .nav-text {
+    background: linear-gradient(135deg, #6366f1, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.side-btn.portal-btn:hover,
+.side-btn.portal-btn.active {
+    width: 210px;
+    background: linear-gradient(160deg, #f5f3ff, #eff6ff);
+    box-shadow: 0 8px 28px rgba(99, 102, 241, 0.28);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    animation: none;
+    transform: translateY(-2px) scale(1.02);
+}
+
+.side-btn.portal-btn:hover i {
+    transform: scale(1.18) rotate(-6deg);
+    filter: drop-shadow(0 0 7px rgba(99, 102, 241, 0.55));
+}
+
+.side-btn.portal-btn:hover .nav-text,
+.side-btn.portal-btn.active .nav-text {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* ══════════════════════════════════════
+   FOOD APP BUTTON
+══════════════════════════════════════ */
+.side-btn.food-btn {
+    animation: subtleFloat 3.5s ease-in-out infinite alternate;
+    animation-delay: 0.8s;
+}
+
+.side-btn.food-btn i {
+    background: linear-gradient(135deg, #f97316, #ef4444);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.side-btn.food-btn .nav-text {
+    background: linear-gradient(135deg, #f97316, #ef4444);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.side-btn.food-btn:hover,
+.side-btn.food-btn.active {
+    width: 210px;
+    background: linear-gradient(160deg, #fff7ed, #fef2f2);
+    box-shadow: 0 8px 28px rgba(249, 115, 22, 0.28);
+    border: 1px solid rgba(249, 115, 22, 0.2);
+    animation: none;
+    transform: translateY(-2px) scale(1.02);
+}
+
+.side-btn.food-btn:hover i {
+    transform: scale(1.18) rotate(8deg);
+    filter: drop-shadow(0 0 7px rgba(249, 115, 22, 0.55));
+}
+
+.side-btn.food-btn:hover .nav-text,
+.side-btn.food-btn.active .nav-text {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Shared floating animation for link buttons */
+@keyframes subtleFloat {
+    0%   { transform: translateY(0px); }
+    100% { transform: translateY(-4px); }
+}
+
+/* Ripple overlay on click */
+.side-btn.portal-btn::after,
+.side-btn.food-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: rgba(255, 255, 255, 0.3);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    pointer-events: none;
+}
+.side-btn.portal-btn:active::after,
+.side-btn.food-btn:active::after {
+    opacity: 1;
+}
+.side-btn.portal-btn:active,
+.side-btn.food-btn:active {
+    transform: scale(0.95);
+}
 
 /* ══════════════════════════════════════
    MAIN CONTENT
@@ -606,9 +733,14 @@ input[type="number"]:hover, input[type="number"]:focus {
     .floating-sidebar { width: 100%; flex-direction: row; padding: 0 14px; border-radius: 34px; box-shadow: 0 -8px 36px rgba(0,0,0,0.1); }
     .brand-icon { display: none; }
     .nav-items { flex-direction: row; justify-content: space-around; }
+    .nav-divider { width: 1px; height: 28px; background: linear-gradient(180deg, transparent, rgba(16,185,129,0.3), transparent); margin: 0 0.1rem; }
     .side-btn { width: 50px; height: 50px; }
     .side-btn:hover, .side-btn.active { width: 50px; }
     .side-btn .nav-text { display: none; }
+    .side-btn.portal-btn:hover,
+    .side-btn.food-btn:hover { width: 50px; }
+    .side-btn.portal-btn,
+    .side-btn.food-btn { animation: none; }
     .grade-grid { grid-template-columns: 1fr; }
     .gradient-text { font-size: 1.8rem; }
     .hero-logo.static-logo { width: 200px; }
