@@ -1,147 +1,176 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>SIMATS | Academic Toolkit</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    
-    <div class="bg-glow glow-1"></div>
-    <div class="bg-glow glow-2"></div>
-    <div class="bg-glow glow-3"></div>
 
-    <!-- Floating particles -->
-    <div class="particles" id="particles"></div>
+    <!-- AMBIENT BACKGROUND -->
+    <div class="ambient-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
+    </div>
+    <canvas id="particle-canvas"></canvas>
 
+    <!-- TOP BAR (Mobile) -->
+    <header class="topbar">
+        <button class="hamburger" id="hamburger-btn" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="topbar-brand">
+            <img src="logosimats.png" alt="SIMATS" class="topbar-logo">
+            <span class="topbar-title">Academic Toolkit</span>
+        </div>
+        <button class="topbar-theme-btn" id="theme-toggle-mobile" aria-label="Toggle theme">
+            <i class="fa-solid fa-moon" id="theme-icon-mobile"></i>
+        </button>
+    </header>
+
+    <!-- MOBILE DRAWER OVERLAY -->
+    <div class="drawer-overlay" id="drawer-overlay"></div>
+
+    <!-- APP WRAPPER -->
     <div class="app-container">
-        
-        <div class="sidebar-wrapper">
-            <nav class="floating-sidebar">
+
+        <!-- SIDEBAR -->
+        <div class="sidebar-wrapper" id="sidebar-wrapper">
+            <nav class="floating-sidebar" id="floating-sidebar">
+
                 <div class="brand-icon">
                     <img src="logosimats.png" alt="SIMATS Logo" class="college-logo-small">
                 </div>
-                
+
                 <div class="nav-items">
-                    <button class="side-btn active" data-target="home-section">
+                    <button class="side-btn active" data-target="home-section" data-tooltip="Home">
                         <i class="fa-solid fa-house"></i>
                         <span class="nav-text">Home</span>
                     </button>
-                    <button class="side-btn" data-target="cgpa-section">
+                    <button class="side-btn" data-target="cgpa-section" data-tooltip="CGPA">
                         <i class="fa-solid fa-calculator"></i>
                         <span class="nav-text">CGPA Calculator</span>
                     </button>
-                    <button class="side-btn" data-target="attendance-section">
+                    <button class="side-btn" data-target="attendance-section" data-tooltip="Attendance">
                         <i class="fa-solid fa-calendar-check"></i>
                         <span class="nav-text">Attendance</span>
                     </button>
-                    <button class="side-btn" data-target="bunk-section">
+                    <button class="side-btn" data-target="bunk-section" data-tooltip="Bunk Calc">
                         <i class="fa-solid fa-person-running"></i>
                         <span class="nav-text">Bunk Calc</span>
                     </button>
 
-                    <!-- Divider -->
                     <div class="nav-divider"></div>
 
-                    <!-- ARMS Portal -->
-                    <a class="side-btn portal-btn" href="https://arms.sse.saveetha.com/" target="_blank" rel="noopener noreferrer" title="ARMS Portal">
+                    <a class="side-btn portal-btn" href="https://arms.sse.saveetha.com/" target="_blank" rel="noopener noreferrer" data-tooltip="ARMS Portal">
                         <i class="fa-solid fa-shield-halved"></i>
                         <span class="nav-text">ARMS Portal</span>
                     </a>
-
-                    <!-- Food App -->
-                    <a class="side-btn food-btn" href="https://life.saveetha.com/" target="_blank" rel="noopener noreferrer" title="Food App">
+                    <a class="side-btn food-btn" href="https://life.saveetha.com/" target="_blank" rel="noopener noreferrer" data-tooltip="Food App">
                         <i class="fa-solid fa-utensils"></i>
                         <span class="nav-text">Food App</span>
                     </a>
                 </div>
+
+                <div class="sidebar-footer">
+                    <button class="theme-toggle-sidebar" id="theme-toggle-sidebar" data-tooltip="Theme">
+                        <i class="fa-solid fa-moon" id="theme-icon-sidebar"></i>
+                        <span class="nav-text">Dark Mode</span>
+                    </button>
+                </div>
             </nav>
         </div>
 
-        <main class="main-content">
-            
-            <!-- ═══ HOME SECTION ═══ -->
+        <!-- MAIN CONTENT -->
+        <main class="main-content" id="main-content">
+
+            <!-- HOME SECTION -->
             <section id="home-section" class="tool-section active-section">
                 <div class="glass-card hero-card">
-
-                    <!-- Decorative rings -->
                     <div class="hero-ring ring-1"></div>
                     <div class="hero-ring ring-2"></div>
                     <div class="hero-ring ring-3"></div>
-
-                    <!-- Floating orbs inside hero -->
                     <div class="hero-orb orb-a"></div>
                     <div class="hero-orb orb-b"></div>
                     <div class="hero-orb orb-c"></div>
-
                     <div class="hero-content">
                         <div class="logo-wrapper">
                             <div class="logo-glow-ring"></div>
                             <img src="logosimats.png" alt="SIMATS Engineering" class="hero-logo static-logo">
                         </div>
-                        
-                        <h1 class="gradient-text">SIMATS ACADEMIC TOOLKIT</h1>
-                        <p class="tagline"><i class="fa-solid fa-award"></i> Engineering Excellence <i class="fa-solid fa-award"></i></p>
-                        <p class="subtitle">Welcome to the official utility dashboard for SIMATS Engineering students. Seamlessly calculate your CGPA, predict future academic targets, and ensure your attendance meets the strict 80% criteria.</p>
-                        
-                        <!-- Stats row -->
-                        <div class="hero-stats">
-                            <div class="stat-pill">
-                                <i class="fa-solid fa-calculator"></i>
-                                <span>CGPA Calculator</span>
-                            </div>
-                            <div class="stat-divider"></div>
-                            <div class="stat-pill">
-                                <i class="fa-solid fa-calendar-check"></i>
-                                <span>Attendance Tracker</span>
-                            </div>
-                            <div class="stat-divider"></div>
-                            <div class="stat-pill">
-                                <i class="fa-solid fa-person-running"></i>
-                                <span>Bunk Planner</span>
-                            </div>
+                        <div class="hero-badge">
+                            <i class="fa-solid fa-award"></i>
+                            <span>Engineering Excellence</span>
                         </div>
-
+                        <h1 class="gradient-text">SIMATS ACADEMIC TOOLKIT</h1>
+                        <p class="subtitle">Your all-in-one academic command center. Calculate CGPA, track attendance, plan bunks — all in one premium dashboard built for SIMATS Engineering students.</p>
+                        <div class="hero-stats">
+                            <div class="stat-pill"><i class="fa-solid fa-calculator"></i><span>CGPA Calculator</span></div>
+                            <div class="stat-divider"></div>
+                            <div class="stat-pill"><i class="fa-solid fa-calendar-check"></i><span>Attendance Tracker</span></div>
+                            <div class="stat-divider"></div>
+                            <div class="stat-pill"><i class="fa-solid fa-person-running"></i><span>Bunk Planner</span></div>
+                        </div>
                         <div class="quick-actions">
-                            <button class="btn primary-btn pulse-btn" id="get-started-btn">
+                            <button class="btn primary-btn pulse-btn magnetic-btn" id="get-started-btn">
                                 <i class="fa-solid fa-rocket"></i> Get Started
                             </button>
+                        </div>
+                        <div class="feature-cards">
+                            <div class="feat-card" data-target="cgpa-section">
+                                <div class="feat-icon green"><i class="fa-solid fa-chart-line"></i></div>
+                                <div class="feat-text"><strong>CGPA Calculator</strong><span>Grade-wise computation</span></div>
+                                <i class="fa-solid fa-arrow-right feat-arrow"></i>
+                            </div>
+                            <div class="feat-card" data-target="attendance-section">
+                                <div class="feat-icon blue"><i class="fa-solid fa-percent"></i></div>
+                                <div class="feat-text"><strong>Attendance Tracker</strong><span>80% rule enforcer</span></div>
+                                <i class="fa-solid fa-arrow-right feat-arrow"></i>
+                            </div>
+                            <div class="feat-card" data-target="bunk-section">
+                                <div class="feat-icon orange"><i class="fa-solid fa-bed"></i></div>
+                                <div class="feat-text"><strong>Bunk Calculator</strong><span>Safe skip planner</span></div>
+                                <i class="fa-solid fa-arrow-right feat-arrow"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- ═══ CGPA SECTION ═══ -->
+            <!-- CGPA SECTION -->
             <section id="cgpa-section" class="tool-section">
+                <div class="section-header">
+                    <div class="section-icon-wrap green"><i class="fa-solid fa-calculator"></i></div>
+                    <div>
+                        <h2 class="section-title">CGPA Calculator</h2>
+                        <p class="section-sub">S=10 · A=9 · B=8 · C=7 · D=6 · E=5</p>
+                    </div>
+                </div>
                 <div class="split-layout">
-                    <div class="glass-card panel-left interactive-glow">
+                    <div class="glass-card panel-left tilt-card">
                         <div class="card-header">
-                            <div class="icon-box green"><i class="fa-solid fa-calculator"></i></div>
-                            <div>
-                                <h3>Grade Input</h3>
-                                <p>Enter number of subjects for each grade</p>
-                            </div>
+                            <div class="icon-box green"><i class="fa-solid fa-pen-to-square"></i></div>
+                            <div><h3>Grade Input</h3><p>Enter subjects per grade</p></div>
                         </div>
-                        
                         <div class="grade-grid">
-                            <div class="grade-input-box"><div class="grade-label"><span class="badge s-badge">S</span> Grade S <span class="sub-text">Subjects</span></div><input type="number" id="grade-s" placeholder="0" min="0"></div>
-                            <div class="grade-input-box"><div class="grade-label"><span class="badge a-badge">A</span> Grade A <span class="sub-text">Subjects</span></div><input type="number" id="grade-a" placeholder="0" min="0"></div>
-                            <div class="grade-input-box"><div class="grade-label"><span class="badge b-badge">B</span> Grade B <span class="sub-text">Subjects</span></div><input type="number" id="grade-b" placeholder="0" min="0"></div>
-                            <div class="grade-input-box"><div class="grade-label"><span class="badge c-badge">C</span> Grade C <span class="sub-text">Subjects</span></div><input type="number" id="grade-c" placeholder="0" min="0"></div>
-                            <div class="grade-input-box"><div class="grade-label"><span class="badge d-badge">D</span> Grade D <span class="sub-text">Subjects</span></div><input type="number" id="grade-d" placeholder="0" min="0"></div>
-                            <div class="grade-input-box"><div class="grade-label"><span class="badge e-badge">E</span> Grade E <span class="sub-text">Subjects</span></div><input type="number" id="grade-e" placeholder="0" min="0"></div>
+                            <div class="grade-input-box"><div class="grade-label"><span class="badge s-badge">S</span>Grade S<span class="sub-text">10 pts</span></div><input type="number" id="grade-s" placeholder="0" min="0"></div>
+                            <div class="grade-input-box"><div class="grade-label"><span class="badge a-badge">A</span>Grade A<span class="sub-text">9 pts</span></div><input type="number" id="grade-a" placeholder="0" min="0"></div>
+                            <div class="grade-input-box"><div class="grade-label"><span class="badge b-badge">B</span>Grade B<span class="sub-text">8 pts</span></div><input type="number" id="grade-b" placeholder="0" min="0"></div>
+                            <div class="grade-input-box"><div class="grade-label"><span class="badge c-badge">C</span>Grade C<span class="sub-text">7 pts</span></div><input type="number" id="grade-c" placeholder="0" min="0"></div>
+                            <div class="grade-input-box"><div class="grade-label"><span class="badge d-badge">D</span>Grade D<span class="sub-text">6 pts</span></div><input type="number" id="grade-d" placeholder="0" min="0"></div>
+                            <div class="grade-input-box"><div class="grade-label"><span class="badge e-badge">E</span>Grade E<span class="sub-text">5 pts</span></div><input type="number" id="grade-e" placeholder="0" min="0"></div>
                         </div>
-
                         <div class="action-buttons">
-                            <button id="calc-cgpa" class="btn primary-btn"><i class="fa-solid fa-bolt"></i> Calculate CGPA</button>
+                            <button id="calc-cgpa" class="btn primary-btn magnetic-btn"><i class="fa-solid fa-bolt"></i> Calculate CGPA</button>
                             <button id="reset-cgpa" class="btn outline-btn"><i class="fa-solid fa-rotate-right"></i> Reset</button>
                         </div>
                     </div>
-
-                    <div class="glass-card result-panel interactive-glow">
+                    <div class="glass-card result-panel tilt-card">
                         <div id="cgpa-empty-state" class="empty-state">
                             <div class="icon-box large"><i class="fa-solid fa-chart-pie"></i></div>
                             <h3>Ready to Calculate</h3>
@@ -149,38 +178,42 @@
                         </div>
                         <div id="cgpa-result-state" class="result-state hidden">
                             <h3 class="result-title">Your CGPA</h3>
+                            <div id="cgpa-result" class="huge-result mono"></div>
                             <p id="cgpa-desc" class="result-desc"></p>
-                            <div id="cgpa-result" class="huge-result"></div>
+                            <div class="result-bar-wrap"><div class="result-bar" id="cgpa-bar"></div></div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- ═══ ATTENDANCE SECTION ═══ -->
+            <!-- ATTENDANCE SECTION -->
             <section id="attendance-section" class="tool-section">
+                <div class="section-header">
+                    <div class="section-icon-wrap blue"><i class="fa-solid fa-calendar-check"></i></div>
+                    <div>
+                        <h2 class="section-title">Attendance Tracker</h2>
+                        <p class="section-sub">Maintain the mandatory 80% requirement</p>
+                    </div>
+                </div>
                 <div class="split-layout">
-                    <div class="glass-card panel-left interactive-glow">
+                    <div class="glass-card panel-left tilt-card">
                         <div class="card-header">
-                            <div class="icon-box green"><i class="fa-solid fa-calendar-check"></i></div>
-                            <div>
-                                <h3>Attendance Tracker</h3>
-                                <p>Maintain your strict 80% requirement.</p>
-                            </div>
+                            <div class="icon-box blue"><i class="fa-solid fa-calendar-check"></i></div>
+                            <div><h3>Attendance Tracker</h3><p>Maintain your strict 80% requirement.</p></div>
                         </div>
                         <div class="input-container">
                             <div class="input-group">
                                 <label>Total Classes Conducted</label>
-                                <input type="number" id="total-classes" placeholder="e.g. 50">
+                                <div class="input-wrap"><i class="fa-solid fa-chalkboard-user input-icon"></i><input type="number" id="total-classes" placeholder="e.g. 50"></div>
                             </div>
                             <div class="input-group">
                                 <label>Total Classes Attended</label>
-                                <input type="number" id="attended-classes" placeholder="e.g. 42">
+                                <div class="input-wrap"><i class="fa-solid fa-user-check input-icon"></i><input type="number" id="attended-classes" placeholder="e.g. 42"></div>
                             </div>
                         </div>
-                        <button id="calc-attendance" class="btn primary-btn full-width"><i class="fa-solid fa-bolt"></i> Check Status</button>
+                        <button id="calc-attendance" class="btn primary-btn full-width magnetic-btn"><i class="fa-solid fa-bolt"></i> Check Status</button>
                     </div>
-
-                    <div class="glass-card result-panel interactive-glow">
+                    <div class="glass-card result-panel tilt-card">
                         <div id="att-empty-state" class="empty-state">
                             <div class="icon-box large"><i class="fa-solid fa-percent"></i></div>
                             <h3>Awaiting Input</h3>
@@ -188,38 +221,48 @@
                         </div>
                         <div id="att-result-state" class="result-state hidden">
                             <h3 class="result-title">Current Attendance</h3>
-                            <div id="attendance-result" class="huge-result"></div>
+                            <div id="attendance-result" class="huge-result mono"></div>
+                            <div class="attendance-ring-wrap">
+                                <svg class="att-ring" viewBox="0 0 120 120">
+                                    <circle class="ring-bg" cx="60" cy="60" r="50"/>
+                                    <circle class="ring-fill" id="att-ring-fill" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="314"/>
+                                </svg>
+                                <div class="ring-center-text" id="att-ring-label">0%</div>
+                            </div>
                             <p id="att-desc" class="result-desc"></p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- ═══ BUNK SECTION ═══ -->
+            <!-- BUNK SECTION -->
             <section id="bunk-section" class="tool-section">
+                <div class="section-header">
+                    <div class="section-icon-wrap orange"><i class="fa-solid fa-person-running"></i></div>
+                    <div>
+                        <h2 class="section-title">Bunk Calculator</h2>
+                        <p class="section-sub">Plan your skips wisely, stay above 80%</p>
+                    </div>
+                </div>
                 <div class="split-layout">
-                    <div class="glass-card panel-left interactive-glow">
+                    <div class="glass-card panel-left tilt-card">
                         <div class="card-header">
                             <div class="icon-box orange"><i class="fa-solid fa-person-running"></i></div>
-                            <div>
-                                <h3>Bunk Calculator</h3>
-                                <p>Plan your skips wisely to stay above 80%.</p>
-                            </div>
+                            <div><h3>Bunk Calculator</h3><p>Plan your skips wisely to stay above 80%.</p></div>
                         </div>
                         <div class="input-container">
                             <div class="input-group">
                                 <label>Current Total Classes</label>
-                                <input type="number" id="bunk-total" placeholder="e.g. 50">
+                                <div class="input-wrap"><i class="fa-solid fa-list-ol input-icon"></i><input type="number" id="bunk-total" placeholder="e.g. 50"></div>
                             </div>
                             <div class="input-group">
                                 <label>Current Attended Classes</label>
-                                <input type="number" id="bunk-attended" placeholder="e.g. 40">
+                                <div class="input-wrap"><i class="fa-solid fa-user-check input-icon"></i><input type="number" id="bunk-attended" placeholder="e.g. 40"></div>
                             </div>
                         </div>
-                        <button id="calc-bunk" class="btn primary-btn full-width"><i class="fa-solid fa-bolt"></i> Calculate Safe Bunks</button>
+                        <button id="calc-bunk" class="btn primary-btn full-width magnetic-btn"><i class="fa-solid fa-bolt"></i> Calculate Safe Bunks</button>
                     </div>
-
-                    <div class="glass-card result-panel interactive-glow">
+                    <div class="glass-card result-panel tilt-card">
                         <div id="bunk-empty-state" class="empty-state">
                             <div class="icon-box large"><i class="fa-solid fa-bed"></i></div>
                             <h3>Awaiting Input</h3>
@@ -228,10 +271,10 @@
                         <div id="bunk-result-state" class="result-state hidden">
                             <div class="bunk-attendance-display">
                                 <span class="attendance-label">Current Attendance:</span>
-                                <span id="bunk-current-attendance" class="attendance-value">--</span>
+                                <span id="bunk-current-attendance" class="attendance-value mono">--</span>
                             </div>
                             <h3 id="bunk-title" class="result-title">Bunk Analysis</h3>
-                            <div id="bunk-huge" class="huge-result"></div>
+                            <div id="bunk-huge" class="huge-result mono"></div>
                             <p id="bunk-desc" class="result-desc"></p>
                         </div>
                     </div>
@@ -239,6 +282,46 @@
             </section>
 
         </main>
+    </div>
+
+    <!-- MOBILE BOTTOM NAV -->
+    <nav class="bottom-nav" id="bottom-nav">
+        <button class="bnav-btn active" data-target="home-section">
+            <i class="fa-solid fa-house"></i><span>Home</span>
+        </button>
+        <button class="bnav-btn" data-target="cgpa-section">
+            <i class="fa-solid fa-calculator"></i><span>CGPA</span>
+        </button>
+        <button class="bnav-btn" data-target="attendance-section">
+            <i class="fa-solid fa-calendar-check"></i><span>Attend</span>
+        </button>
+        <button class="bnav-btn" data-target="bunk-section">
+            <i class="fa-solid fa-person-running"></i><span>Bunk</span>
+        </button>
+        <button class="bnav-btn" id="bnav-more">
+            <i class="fa-solid fa-ellipsis"></i><span>More</span>
+        </button>
+    </nav>
+
+    <!-- MORE DRAWER -->
+    <div class="more-overlay" id="more-overlay"></div>
+    <div class="more-drawer" id="more-drawer">
+        <div class="more-drawer-handle"></div>
+        <a href="https://arms.sse.saveetha.com/" target="_blank" rel="noopener noreferrer" class="more-drawer-item">
+            <div class="more-icon portal-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            <div class="more-text"><strong>ARMS Portal</strong><span>Academic record system</span></div>
+            <i class="fa-solid fa-arrow-up-right-from-square more-ext"></i>
+        </a>
+        <a href="https://life.saveetha.com/" target="_blank" rel="noopener noreferrer" class="more-drawer-item">
+            <div class="more-icon food-icon"><i class="fa-solid fa-utensils"></i></div>
+            <div class="more-text"><strong>Food App</strong><span>Campus dining &amp; orders</span></div>
+            <i class="fa-solid fa-arrow-up-right-from-square more-ext"></i>
+        </a>
+        <button class="more-drawer-item" id="bnav-theme-toggle">
+            <div class="more-icon theme-icon"><i class="fa-solid fa-circle-half-stroke"></i></div>
+            <div class="more-text"><strong id="theme-drawer-label">Dark Mode</strong><span>Switch appearance</span></div>
+            <div class="toggle-pill" id="theme-pill"><div class="toggle-thumb"></div></div>
+        </button>
     </div>
 
     <script src="app.js"></script>
