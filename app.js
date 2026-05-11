@@ -245,6 +245,8 @@ const facultyDirectory = facultyRawData.split(/\n+/).map((line) => {
     };
 }).filter((entry) => entry.name && entry.phone);
 
+
+
 function flashPageTransition() {
     if (!pageTransition || prefersReducedMotion) return;
     pageTransition.classList.add('active');
@@ -315,7 +317,8 @@ function buildWhatsAppLink(phone) {
 }
 
 function renderFacultyDirectory(searchTerm = '') {
-    if (!facultyList) return;
+    try {
+        if (!facultyList) return;
 
     const normalizedSearch = searchTerm.trim().toLowerCase();
     const filteredFaculty = facultyDirectory.filter((faculty) => {
@@ -351,35 +354,13 @@ function renderFacultyDirectory(searchTerm = '') {
     if (facultyEmpty) {
         facultyEmpty.classList.toggle('hidden', filteredFaculty.length > 0);
     }
-
-    // Add staggered entrance animations and subtle 3D tilt micro-interactions
-    const cards = facultyList.querySelectorAll('.faculty-card');
-    cards.forEach((card, i) => {
-        if (!prefersReducedMotion) {
-            card.style.animationDelay = `${i * 60}ms`;
-            // trigger enter animation
-            card.classList.add('enter');
-        }
-
-        // 3D tilt on pointer move for desktop (disabled when reduced-motion)
-        if (!prefersReducedMotion) {
-            let rect = null;
-            card.addEventListener('mousemove', (ev) => {
-                rect = rect || card.getBoundingClientRect();
-                const px = ev.clientX - rect.left;
-                const py = ev.clientY - rect.top;
-                const rx = ((py - rect.height / 2) / rect.height) * -8; // rotateX
-                const ry = ((px - rect.width  / 2) / rect.width)  * 8;  // rotateY
-                card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg)`;
-                card.style.transition = 'transform 0.08s linear';
-            }, { passive: true });
-
-            card.addEventListener('mouseleave', () => {
-                card.style.transition = 'transform 0.35s cubic-bezier(0.2,0.9,0.2,1)';
-                card.style.transform = '';
-            });
-        }
-    });
+    } catch (err) {
+        console.error('Error rendering faculty directory:', err);
+        // Show friendly fallback
+        if (facultyList) facultyList.innerHTML = '';
+        if (facultyEmpty) facultyEmpty.classList.remove('hidden');
+        if (facultyCount) facultyCount.textContent = `0 / ${facultyDirectory.length} faculty`;
+    }
 }
 
 if (facultySearchInput) {
@@ -866,9 +847,8 @@ async function exportCapture(node) {
 
     // Apply inline styles to the clone to ensure consistent export rendering
     clone.style.boxSizing = 'border-box';
-    clone.style.background = bg;
-    clone.style.width = rect.width + 'px';
-    clone.style.height = rect.height + 'px';
+    clone.style.width = '100%';
+    clone.style.height = '100%';
     clone.style.margin = '0';
     clone.style.transition = 'none';
     clone.style.removeProperty = 'transform';
@@ -878,15 +858,32 @@ async function exportCapture(node) {
     container.style.position = 'fixed';
     container.style.left = '-20000px';
     container.style.top = '0';
-    container.style.padding = '20px';
-    container.style.background = bg;
+    container.style.padding = '0';
     container.style.zIndex = '99999';
+    container.style.width = rect.width + 'px';
+    container.style.height = rect.height + 'px';
+
+    // Prefer capturing the computed background-image (gradient) when present
+    const bgImage = computed.backgroundImage;
+    if (bgImage && bgImage !== 'none') {
+        container.style.backgroundImage = bgImage;
+        container.style.backgroundRepeat = computed.backgroundRepeat || 'no-repeat';
+        container.style.backgroundSize = computed.backgroundSize || 'cover';
+        container.style.backgroundPosition = computed.backgroundPosition || 'center';
+        // make clone transparent so container gradient shows through
+        clone.style.background = 'transparent';
+    } else {
+        container.style.background = bg;
+        clone.style.background = bg;
+    }
+
     container.appendChild(clone);
     document.body.appendChild(container);
 
     try {
         const scale = Math.min(2, window.devicePixelRatio || 1);
-        const canvas = await html2canvas(clone, { useCORS: true, backgroundColor: bg, scale });
+        // capture the container so the gradient background is included
+        const canvas = await html2canvas(container, { useCORS: true, backgroundColor: null, scale });
         return canvas;
     } finally {
         // clean up
