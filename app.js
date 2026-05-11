@@ -104,6 +104,7 @@ const facultySearchInput = document.getElementById('faculty-search');
 const facultyList = document.getElementById('faculty-list');
 const facultyCount = document.getElementById('faculty-count');
 const facultyEmpty = document.getElementById('faculty-empty');
+let facultyDirectoryRendered = false;
 
 const facultyRawData = `
 Dr.T.Yuvaraj - 9944648832
@@ -235,6 +236,51 @@ Dr.C.Mohan - 8056983152
 Dr.ANNIE GRACE - 9841540605
 Dr.Prabhu - 9003256754
 Dr.Terrance - 9944129501
+Dr.Veeramani - 9080381686
+Dr.Saraswathi - 9790788111
+Dr.Uma Priyadarsini - 7200190155
+Dr.Anithaashri - 8680974570
+Dr.S.John Justin - 8940907978
+Dr.S.Radhika - 9940280798
+Dr.Anusuya - 9787821102
+Dr.Nattan Kannan - 7358359476
+Dr.Devi - 9841560895
+Dr.G.Mary Valantina - 9444753407
+Dr.B.SWAMINATHA - 9444755536
+Dr.Grace Pavithra - 9629852536
+Dr.Thandaim Prabu - 9751445529
+Ms.P.Malathi - 8248617994
+Dr.Arulvelan - 8870921600
+Dr.S.Jaanaa Rubavathy - 9789054625
+Dr.R.Saranya - 8248738062
+Dr.Nibedita - 9940317994
+Dr.Kothandaraman - 7010336299
+Dr.B.Soundara - 9790953181
+Dr.CHANDRAKALA - 9600336295
+Dr.KAVITHA - 9566198092
+Dr.Arun John - 8270519339
+Dr.Malathi.K - 9941324901
+Dr.R.Balamangandan - 8220115532
+Dr.G.Ramkumar - 9566560333
+Dr.Charlyn - 9150963017
+Dr.P.Sriramya - 9176290854
+Dr.C.Sherin Shibi - 9962533314
+Dr.Rachel N - 9841313799
+Dr.S.Magesh Kumar - 9789724877
+Dr.Gokul Krishnan - 9894751429
+Dr.V Deva Priya - 9442112071
+Dr.Beena Rani - 9791802182
+Dr.M.Tholkapiyan - 9444254588
+Dr.G.Selvi - 9840887156
+Dr.Revathi - 9444648849
+Mr.Raghavendran.R - 9087382665
+Dr.Mary Jiny D - 9789776824
+Dr.Majella - 9789114123
+Dr.Balamurugan - 9003580708
+Dr.Sivakumar - 9790973774
+Dr.Siva Sankar.V - 9952597610
+Dr.Rajkumar - 9894534789
+Dr.K.Prabakaran - 9786846377
 `.trim();
 
 const facultyDirectory = facultyRawData.split(/\n+/).map((line) => {
@@ -327,11 +373,11 @@ function renderFacultyDirectory(searchTerm = '') {
         return !normalizedSearch || nameMatch || phoneMatch;
     });
 
-    facultyList.innerHTML = filteredFaculty.map((faculty) => {
+    facultyList.innerHTML = filteredFaculty.map((faculty, index) => {
         const callNumber = normalizePhoneNumber(faculty.phone);
         const whatsAppLink = buildWhatsAppLink(faculty.phone);
         return `
-            <article class="faculty-card">
+            <article class="faculty-card" style="--faculty-delay:${index * 45}ms">
                 <div class="faculty-info">
                     <div class="faculty-badge"><i class="fa-solid fa-user-tie"></i></div>
                     <div class="faculty-text">
@@ -365,11 +411,16 @@ function renderFacultyDirectory(searchTerm = '') {
 
 if (facultySearchInput) {
     facultySearchInput.addEventListener('input', (event) => {
+        facultyDirectoryRendered = true;
         renderFacultyDirectory(event.target.value);
     });
 }
 
-renderFacultyDirectory();
+function ensureFacultyDirectoryRendered() {
+    if (facultyDirectoryRendered) return;
+    facultyDirectoryRendered = true;
+    renderFacultyDirectory(facultySearchInput?.value || '');
+}
 
 function switchSection(sectionId) {
     const targetBtn = document.querySelector(`[data-target="${sectionId}"]`);
@@ -392,6 +443,10 @@ function switchSection(sectionId) {
     const targetSection = document.getElementById(sectionId);
     if (targetSection) {
         targetSection.classList.add('active-section');
+    }
+
+    if (sectionId === 'faculty-section') {
+        ensureFacultyDirectoryRendered();
     }
     
     localStorage.setItem('activeSection', sectionId);
@@ -1047,12 +1102,7 @@ function renderYear(year) {
             <div class="dept-accent-bar"></div>
             <div class="dept-card-icon"><i class="fa-solid ${meta.icon}"></i></div>
             <div class="dept-card-inner">
-                <div class="dept-card-topline">
-                    <span class="dept-tag">${year}</span>
-                    <span class="dept-link-state ${link ? 'live' : 'placeholder'}">${link ? 'PDF ready' : 'Coming soon'}</span>
-                </div>
                 <div class="dept-name">${dept}</div>
-                <div class="dept-summary">${deptSummaries[dept]}</div>
             </div>
             <div class="dept-card-actions">
                 <button class="btn small-btn open-dept" data-dept="${dept}" data-year="${year}">${link ? 'Open PDF' : 'Details'}</button>
