@@ -106,6 +106,70 @@ const facultyCount = document.getElementById('faculty-count');
 const facultyEmpty = document.getElementById('faculty-empty');
 let facultyDirectoryRendered = false;
 
+const sidebarScrollState = {
+    rafId: null,
+    pointerInside: false,
+    pointerY: 0,
+};
+
+function updateSidebarAutoScroll() {
+    if (!sidebarWrapper || window.innerWidth < 769) {
+        sidebarScrollState.rafId = null;
+        return;
+    }
+
+    const sidebar = document.getElementById('floating-sidebar');
+    if (!sidebar) {
+        sidebarScrollState.rafId = null;
+        return;
+    }
+
+    const rect = sidebar.getBoundingClientRect();
+    const edgeZone = 96;
+    let speed = 0;
+
+    if (sidebarScrollState.pointerInside) {
+        const pointerOffset = sidebarScrollState.pointerY - rect.top;
+        if (pointerOffset < edgeZone) {
+            speed = -Math.max(1, Math.round((edgeZone - pointerOffset) / 12));
+        } else if (pointerOffset > rect.height - edgeZone) {
+            speed = Math.max(1, Math.round((pointerOffset - (rect.height - edgeZone)) / 12));
+        }
+    }
+
+    if (speed !== 0) {
+        sidebar.scrollTop = Math.max(0, Math.min(sidebar.scrollTop + speed, sidebar.scrollHeight - sidebar.clientHeight));
+    }
+
+    sidebarScrollState.rafId = window.requestAnimationFrame(updateSidebarAutoScroll);
+}
+
+function startSidebarAutoScroll() {
+    if (window.innerWidth < 769 || sidebarScrollState.rafId) return;
+    sidebarScrollState.rafId = window.requestAnimationFrame(updateSidebarAutoScroll);
+}
+
+function stopSidebarAutoScroll() {
+    sidebarScrollState.pointerInside = false;
+    if (sidebarScrollState.rafId) {
+        window.cancelAnimationFrame(sidebarScrollState.rafId);
+        sidebarScrollState.rafId = null;
+    }
+}
+
+if (sidebarWrapper) {
+    sidebarWrapper.addEventListener('pointerenter', () => {
+        sidebarScrollState.pointerInside = true;
+        startSidebarAutoScroll();
+    });
+
+    sidebarWrapper.addEventListener('pointermove', (event) => {
+        sidebarScrollState.pointerY = event.clientY;
+    });
+
+    sidebarWrapper.addEventListener('pointerleave', stopSidebarAutoScroll);
+}
+
 const facultyRawData = `
 Dr.T.Yuvaraj - 9944648832
 Dr.R.Gaesan - 9444751780

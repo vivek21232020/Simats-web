@@ -305,9 +305,14 @@ body {
     flex-direction: column;
     align-items: center;
     padding: 24px 0 20px;
-    overflow: visible;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     transition: background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
 }
+
+.floating-sidebar::-webkit-scrollbar { width: 0; height: 0; }
 
 [data-theme="dark"] .floating-sidebar {
     box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(52,211,153,0.08);
