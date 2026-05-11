@@ -65,6 +65,10 @@
                         <i class="fa-solid fa-person-running"></i>
                         <span class="nav-text">Bunk Calc</span>
                     </button>
+                    <button class="side-btn" data-target="faculty-section" data-tooltip="Faculty">
+                        <i class="fa-solid fa-address-book"></i>
+                        <span class="nav-text">Faculty</span>
+                    </button>
 
                     <div class="nav-divider"></div>
 
@@ -302,6 +306,32 @@
                 </div>
             </section>
 
+            <!-- FACULTY SECTION -->
+            <section id="faculty-section" class="tool-section">
+                <div class="section-header">
+                    <div class="section-icon-wrap green"><i class="fa-solid fa-address-book"></i></div>
+                    <div>
+                        <h2 class="section-title">Faculty Directory</h2>
+                        <p class="section-sub">Search faculty names or numbers, then call or message on WhatsApp</p>
+                    </div>
+                </div>
+                <div class="glass-card faculty-shell tilt-card">
+                    <div class="faculty-toolbar">
+                        <div class="faculty-search-wrap">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input id="faculty-search" type="search" placeholder="Search faculty name or mobile number">
+                        </div>
+                        <div class="faculty-count" id="faculty-count">0 faculty</div>
+                    </div>
+                    <div id="faculty-list" class="faculty-list"></div>
+                    <div id="faculty-empty" class="faculty-empty hidden">
+                        <div class="icon-box large"><i class="fa-solid fa-user-slash"></i></div>
+                        <h3>No Faculty Found</h3>
+                        <p>Try a different name or mobile number.</p>
+                    </div>
+                </div>
+            </section>
+
         </main>
     </div>
 
@@ -318,6 +348,9 @@
         </button>
         <button class="bnav-btn" data-target="bunk-section">
             <i class="fa-solid fa-person-running"></i><span>Bunk</span>
+        </button>
+        <button class="bnav-btn" data-target="faculty-section">
+            <i class="fa-solid fa-address-book"></i><span>Faculty</span>
         </button>
         <button class="bnav-btn" id="bnav-more">
             <i class="fa-solid fa-ellipsis"></i><span>More</span>

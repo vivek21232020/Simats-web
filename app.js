@@ -90,7 +90,7 @@ startParticles();
 ══════════════════════════════════════ */
 const sideButtons = document.querySelectorAll('.side-btn');
 const toolSections = document.querySelectorAll('.tool-section');
-const sectionOrder = ['home-section', 'cgpa-section', 'attendance-section', 'bunk-section'];
+const sectionOrder = ['home-section', 'cgpa-section', 'attendance-section', 'bunk-section', 'faculty-section'];
 const drawerOverlay = document.getElementById('drawer-overlay');
 const moreOverlay = document.getElementById('more-overlay');
 const sidebarWrapper = document.getElementById('sidebar-wrapper');
@@ -100,6 +100,150 @@ const moreToggle = document.getElementById('bnav-more');
 const floatingActionBtn = document.getElementById('floating-action-btn');
 const pageTransition = document.getElementById('page-transition');
 const mainContent = document.getElementById('main-content');
+const facultySearchInput = document.getElementById('faculty-search');
+const facultyList = document.getElementById('faculty-list');
+const facultyCount = document.getElementById('faculty-count');
+const facultyEmpty = document.getElementById('faculty-empty');
+
+const facultyRawData = `
+Dr.T.Yuvaraj - 9944648832
+Dr.R.Gaesan - 9444751780
+Dr.N. Senthilkumar - 9944634394
+Dr.Mary sanitha - 9884186752
+Dr.M.S.Surender - 9791876953
+Dr.Iyyappan J - 9600251579
+Dr.I. Praveen Kumar - 9788169604
+Dr.K.Sangeetha - 8838930689
+Dr.Senthil Kumar C - 9940580501
+Dr.Praveen R - 9962291255
+Dr.Usha Rani - 9600071178
+Dr.Geetha R - 8129511366
+Dr.Priya Rachel - 9566019530
+Dr.SHAKILA DEVI - 7339403331
+Dr.M Ramalakshmi - 9884241227
+Dr.V.Savithri - 9841531472
+Dr.Vasudevan - 8056227308
+Dr.M.Dinesh Kumar - 9791558517
+Dr.B.Raja Bharathi - 9500891008
+Dr.P.R.Karthikeyan - 9944218001
+Dr.VIJAYAKUMARI P - 8754723181
+Dr.K.Vijayalakshmi - 9655662491
+Dr.R.Saravana Kumar - 9894951308
+Dr.N.P.G Bhavani - 8778068976
+Dr.G.Manikandan - 9176276410
+Ms.Ashwini.S - 9952993184
+Dr.Soundara - 9790953181
+Dr.Shanmuga Prabha - 7092072387
+Dr.Radhika Bhaskar - 9710321350
+Dr.R.Dhanalakshmi - 9884787512
+Sr.Sudha - 9994293489
+Dr.Rajesh Kumar - 9842148424
+Dr.Mahaveerakannan - 9788614129
+Mr.Logu - 9042768897
+Dr.V.Karthick - 9884142182
+Dr.S.A.Kalaiselvan - 9043333903
+Dr.A.Gnanasoundari - 8248974652
+Dr.P.Muneeshwari - 978860336
+Dr.Kesavan - 9444304384
+Dr.U.Sakthi - 9444851523
+Dr.U.Arul - 9841490831
+Dr.Vijaya Basker - 9443033062
+Dr.V.Parthipan - 9787366908
+Dr.Sheela - 9962107078
+Dr.M.Vanitha Lakshmi - 9791098344
+Dr.Jesu Jeyarin - 9444053102
+Dr.Rajasekar M - 9677034244
+Dr.S.Kalaiarasi - 9445462495
+Dr.L.Rama Pavarthy - 9840184995
+Dr.Manikavelan - 9600040114
+Dr.Tamilselvan - 9994095015
+Dr.Kanimozhi - 9401730451
+Dr.A.Shrivindhya - 9786197926
+Dr.Rohith Bhat.C - 9840546333
+Dr.Beulah David - 7010695064
+Dr.S.Christy - 9884909250
+Dr.M.Geetha - 9444387531
+Dr.G.Michael - 9940284723
+Dr.Somasundaram - 9443467264
+Dr.Arumugam S S - 9962223356
+Dr.Saravanan.M.S - 8190043400
+Dr.Balamangandan - 8220115532
+Dr.S.Ramesh - 9629570397
+Dr.Gururam - 9841065075
+Dr.P.Shyamala Bharathi - 9840703179
+Dr.G.R.Suresh - 9600983735
+Dr.Jemila Roseline - 9444552840
+Dr.K.Anbazhagan - 6374775259
+Dr.A.Selvakumar - 8837601800
+Dr.A.Mohan - 9894183073
+Dr.S.Narendran - 9884831644
+Dr.A.Raja - 9884218839
+Dr.N.Bharatha Devi - 9965868203
+Dr.V.Nagaraju - 9840873669
+Dr.S.Mahaboob Basha - 9841951420
+Dr.J.Chenni Kumaran - 8825789793
+Dr.A.Prabu - 9444841888
+Dr.Eswar M - 9885506964
+Dr.Gunaseelan - 9943084240
+Dr.S.Jehoshan - 9500716590
+Dr.B.V.Senthil Kumar - 9566927114
+Dr.N.Vijaya - 9787180780
+Dr.S.Poornavel - 9944361111
+Dr.Muthukumar.P - 9787082715
+Dr.M.S.Ravisankar - 7598642107
+Dr.M.Ashokkumar - 9578082320
+Dr.Shaafi.T - 9176096592
+Dr.A.Rama - 9884477403
+Dr.Simon Raj F - 9444045417
+Dr.S.Manikandan - 9585153771
+Dr.Jenila Rani - 9003194033
+Dr.Neelam Sanjeev - 7395927651
+Dr.Nirmala - 9884420495
+Dr.Vaidhegi - 8754170887
+Dr.T.S.Lakshmi - 9894733074
+Dr.M.Nagaraj - 9789031659
+Dr.M.Kalil Rahiman - 9994302469
+Dr.Nimel Ross - 9952828610
+Dr.R.Manikandan - 9976696620
+Dr.Rajmohan - 9894103232
+Dr.E.Sivanantham - 9940801817
+Dr.Reenarani - 9791802182
+Dr.Deepa - 9790909030
+Dr.Padmakala - 8695467803
+Dr.Jaisharma - 9597005225
+Dr.Pradeep Kumar - 9941221988
+Dr.G.Anitha - 9952286913
+Dr.Charlyn - 9150963017
+Dr.N.Nalini - 9941201779
+Dr.P.Sriramya - 9176290854
+Dr.C.Sherin Shibi - 9962533314
+Dr.Rachel N - 9841313799
+Dr.S.Magesh Kumar.S - 9789724877
+Dr.Dhalapthy Rajasekar - 9445452697
+Dr.Palanikumar - 9945522700
+Dr.Rashmita Khilar - 9940220629
+Dr.Gokul Krishna - 9894751429
+Dr.Thinakaran - 9894475486
+Dr.V.Deva Priya - 9442112071
+Dr.J.Pravin Chander - 9786491044
+Dr.Velu - 9380607095
+Mr.Sridhar - 7708533460
+Dr.M.Gunasekaran - 9486564226
+Dr.Jagadeesan - 9865604964
+Dr.S.Sobitha Ahila - 9444221394
+Dr.C.Mohan - 8056983152
+Dr.ANNIE GRACE - 9841540605
+Dr.Prabhu - 9003256754
+Dr.Terrance - 9944129501
+`.trim();
+
+const facultyDirectory = facultyRawData.split(/\n+/).map((line) => {
+    const parts = line.split(/\s+-\s+/);
+    return {
+        name: (parts[0] || '').trim(),
+        phone: (parts[1] || '').trim(),
+    };
+}).filter((entry) => entry.name && entry.phone);
 
 function flashPageTransition() {
     if (!pageTransition || prefersReducedMotion) return;
@@ -159,6 +303,63 @@ function goToAdjacentSection(direction) {
     if (nextIndex === currentIndex) return;
     switchSection(sectionOrder[nextIndex]);
 }
+
+function normalizePhoneNumber(phone) {
+    return phone.replace(/\D/g, '');
+}
+
+function buildWhatsAppLink(phone) {
+    const digits = normalizePhoneNumber(phone);
+    const recipient = digits.length === 10 ? `91${digits}` : digits;
+    return `https://wa.me/${recipient}?text=${encodeURIComponent('Hello Professor')}`;
+}
+
+function renderFacultyDirectory(searchTerm = '') {
+    if (!facultyList) return;
+
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+    const filteredFaculty = facultyDirectory.filter((faculty) => {
+        const nameMatch = faculty.name.toLowerCase().includes(normalizedSearch);
+        const phoneMatch = faculty.phone.replace(/\s+/g, '').includes(normalizedSearch);
+        return !normalizedSearch || nameMatch || phoneMatch;
+    });
+
+    facultyList.innerHTML = filteredFaculty.map((faculty) => {
+        const callNumber = normalizePhoneNumber(faculty.phone);
+        const whatsAppLink = buildWhatsAppLink(faculty.phone);
+        return `
+            <article class="faculty-card">
+                <div class="faculty-info">
+                    <div class="faculty-badge"><i class="fa-solid fa-user-tie"></i></div>
+                    <div class="faculty-text">
+                        <h3>${faculty.name}</h3>
+                        <p>${faculty.phone}</p>
+                    </div>
+                </div>
+                <div class="faculty-actions">
+                    <a class="faculty-action call" href="tel:${callNumber}"><i class="fa-solid fa-phone"></i><span>Call</span></a>
+                    <a class="faculty-action whatsapp" href="${whatsAppLink}" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i><span>WhatsApp</span></a>
+                </div>
+            </article>
+        `;
+    }).join('');
+
+    if (facultyCount) {
+        facultyCount.textContent = `${filteredFaculty.length} / ${facultyDirectory.length} faculty`;
+    }
+
+    if (facultyEmpty) {
+        facultyEmpty.classList.toggle('hidden', filteredFaculty.length > 0);
+    }
+}
+
+if (facultySearchInput) {
+    facultySearchInput.addEventListener('input', (event) => {
+        renderFacultyDirectory(event.target.value);
+    });
+}
+
+renderFacultyDirectory();
 
 function switchSection(sectionId) {
     const targetBtn = document.querySelector(`[data-target="${sectionId}"]`);
