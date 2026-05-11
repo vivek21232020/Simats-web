@@ -90,7 +90,7 @@ startParticles();
 ══════════════════════════════════════ */
 const sideButtons = document.querySelectorAll('.side-btn');
 const toolSections = document.querySelectorAll('.tool-section');
-const sectionOrder = ['home-section', 'cgpa-section', 'attendance-section', 'bunk-section', 'faculty-section'];
+const sectionOrder = ['home-section', 'cgpa-section', 'attendance-section', 'bunk-section', 'faculty-section', 'todo-subjects-section'];
 const drawerOverlay = document.getElementById('drawer-overlay');
 const moreOverlay = document.getElementById('more-overlay');
 const sidebarWrapper = document.getElementById('sidebar-wrapper');
@@ -946,3 +946,176 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 initTheme();
+
+/* ══════════════════════════════════════
+   TO DO / SUBJECTS UI
+══════════════════════════════════════ */
+const departments = [
+    'AGRI','BT','CSE - CYBER SECURITY','CSE - DATA SCIENCE','IT','AIDS','CIVIL','CSE','ECE','BI','CSBS',
+    'CSE - ARTIFICIAL INTELLIGENCE','EEE','MECH','BME','CSE - IOT','CSE - BIOSCIENCE','ENEE','AIML'
+];
+
+const deptMeta = {
+    'AGRI': { icon: 'fa-wheat-awn', accent: '#16a34a', bg: 'rgba(22,163,74,0.12)', soft: 'rgba(22,163,74,0.18)' },
+    'BT': { icon: 'fa-dna', accent: '#0ea5e9', bg: 'rgba(14,165,233,0.12)', soft: 'rgba(14,165,233,0.18)' },
+    'CSE - CYBER SECURITY': { icon: 'fa-shield-halved', accent: '#7c3aed', bg: 'rgba(124,58,237,0.12)', soft: 'rgba(124,58,237,0.18)' },
+    'CSE - DATA SCIENCE': { icon: 'fa-chart-line', accent: '#2563eb', bg: 'rgba(37,99,235,0.12)', soft: 'rgba(37,99,235,0.18)' },
+    'IT': { icon: 'fa-laptop-code', accent: '#0f766e', bg: 'rgba(15,118,110,0.12)', soft: 'rgba(15,118,110,0.18)' },
+    'AIDS': { icon: 'fa-heart-pulse', accent: '#db2777', bg: 'rgba(219,39,119,0.12)', soft: 'rgba(219,39,119,0.18)' },
+    'CIVIL': { icon: 'fa-building', accent: '#f97316', bg: 'rgba(249,115,22,0.12)', soft: 'rgba(249,115,22,0.18)' },
+    'CSE': { icon: 'fa-computer', accent: '#1d4ed8', bg: 'rgba(29,78,216,0.12)', soft: 'rgba(29,78,216,0.18)' },
+    'ECE': { icon: 'fa-microchip', accent: '#8b5cf6', bg: 'rgba(139,92,246,0.12)', soft: 'rgba(139,92,246,0.18)' },
+    'BI': { icon: 'fa-book-open', accent: '#059669', bg: 'rgba(5,150,105,0.12)', soft: 'rgba(5,150,105,0.18)' },
+    'CSBS': { icon: 'fa-briefcase', accent: '#ca8a04', bg: 'rgba(202,138,4,0.12)', soft: 'rgba(202,138,4,0.18)' },
+    'CSE - ARTIFICIAL INTELLIGENCE': { icon: 'fa-robot', accent: '#6366f1', bg: 'rgba(99,102,241,0.12)', soft: 'rgba(99,102,241,0.18)' },
+    'EEE': { icon: 'fa-bolt', accent: '#f59e0b', bg: 'rgba(245,158,11,0.12)', soft: 'rgba(245,158,11,0.18)' },
+    'MECH': { icon: 'fa-gears', accent: '#64748b', bg: 'rgba(100,116,139,0.12)', soft: 'rgba(100,116,139,0.18)' },
+    'BME': { icon: 'fa-stethoscope', accent: '#14b8a6', bg: 'rgba(20,184,166,0.12)', soft: 'rgba(20,184,166,0.18)' },
+    'CSE - IOT': { icon: 'fa-wifi', accent: '#06b6d4', bg: 'rgba(6,182,212,0.12)', soft: 'rgba(6,182,212,0.18)' },
+    'CSE - BIOSCIENCE': { icon: 'fa-dna', accent: '#22c55e', bg: 'rgba(34,197,94,0.12)', soft: 'rgba(34,197,94,0.18)' },
+    'ENEE': { icon: 'fa-plug-circle-bolt', accent: '#ef4444', bg: 'rgba(239,68,68,0.12)', soft: 'rgba(239,68,68,0.18)' },
+    'AIML': { icon: 'fa-brain', accent: '#ec4899', bg: 'rgba(236,72,153,0.12)', soft: 'rgba(236,72,153,0.18)' }
+};
+
+const deptSummaries = {};
+departments.forEach(d => {
+    deptSummaries[d] = `${d} — Short summary placeholder. Replace with real description.`;
+});
+
+const pdfLinks = {
+    '2024': {
+        'AGRI': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024%20AGRI.pdf'
+        , 'AIDS': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024%20AIDS.pdf'
+        , 'BI': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024%20BI.pdf'
+        , 'BME': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024%20BME.pdf'
+        , 'BT': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024%20BT.pdf'
+        , 'CIVIL': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024%20CIVIL.pdf'
+        , 'CSBS': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024%20CSBS.pdf'
+        , 'CSE - IOT': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024%20CSE%20-%20IOT.pdf'
+        , 'CSE - CYBER SECURITY': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024%20CSE%20-CYBER%20SECURITY.pdf'
+        , 'CSE - ARTIFICIAL INTELLIGENCE': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024%20CSE-ARTIFICIAL%20INTELLIGENCE.pdf'
+        , 'CSE - BIOSCIENCE': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024%20CSE-BIOSCIENCE.pdf'
+        , 'CSE - DATA SCIENCE': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024%20CSE-DATA%20SCIENCE.pdf'
+        , 'ECE': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024%20ECE.pdf'
+        , 'EEE': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024%20EEE.pdf'
+        , 'ENEE': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024%20ENEE.pdf'
+        , 'IT': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024%20IT.pdf'
+        , 'MECH': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024%20MECH.pdf'
+        , 'AIML': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024-AIML.pdf'
+    }
+}; // { '2022': { 'CSE': 'https://...' } } — to be filled later
+
+let selectedYear = '2022';
+
+function getDeptLink(year, dept) {
+    return (pdfLinks[year] && pdfLinks[year][dept]) || '';
+}
+
+function openDeptPdf(year, dept) {
+    const link = getDeptLink(year, dept);
+    if (!link) return false;
+    window.open(link, '_blank', 'noopener,noreferrer');
+    return true;
+}
+
+function setSelectedDeptCard(year, dept) {
+    const cards = document.querySelectorAll('.dept-card');
+    cards.forEach((card) => {
+        const isActive = card.dataset.year === year && card.dataset.dept === dept;
+        card.classList.toggle('selected', isActive);
+    });
+}
+
+function renderYear(year) {
+    const list = document.getElementById('dept-list');
+    if (!list) return;
+    list.innerHTML = '';
+    departments.forEach((dept) => {
+        const link = getDeptLink(year, dept);
+        const meta = deptMeta[dept] || { icon: 'fa-graduation-cap', accent: '#10b981' };
+        const a = document.createElement('article');
+        a.className = 'dept-card';
+        a.tabIndex = 0;
+        a.dataset.year = year;
+        a.dataset.dept = dept;
+        a.dataset.hasLink = link ? 'true' : 'false';
+        a.style.setProperty('--dept-accent', meta.accent);
+        a.style.setProperty('--dept-accent-bg', meta.bg || 'rgba(16,185,129,0.12)');
+        a.style.setProperty('--dept-accent-soft', meta.soft || 'rgba(16,185,129,0.18)');
+        a.style.animationDelay = `${departments.indexOf(dept) * 45}ms`;
+        a.innerHTML = `
+            <div class="dept-accent-bar"></div>
+            <div class="dept-card-icon"><i class="fa-solid ${meta.icon}"></i></div>
+            <div class="dept-card-inner">
+                <div class="dept-card-topline">
+                    <span class="dept-tag">${year}</span>
+                    <span class="dept-link-state ${link ? 'live' : 'placeholder'}">${link ? 'PDF ready' : 'Coming soon'}</span>
+                </div>
+                <div class="dept-name">${dept}</div>
+                <div class="dept-summary">${deptSummaries[dept]}</div>
+            </div>
+            <div class="dept-card-actions">
+                <button class="btn small-btn open-dept" data-dept="${dept}" data-year="${year}">${link ? 'Open PDF' : 'Details'}</button>
+            </div>
+        `;
+        a.addEventListener('click', () => {
+            setSelectedDeptCard(year, dept);
+            if (!openDeptPdf(year, dept)) {
+                showDeptDetail(year, dept);
+            }
+        });
+        list.appendChild(a);
+    });
+
+    // attach listeners
+    list.querySelectorAll('.open-dept').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const dept = btn.dataset.dept;
+            const yr = btn.dataset.year;
+            setSelectedDeptCard(yr, dept);
+            if (!openDeptPdf(yr, dept)) {
+                showDeptDetail(yr, dept);
+            }
+        });
+    });
+}
+
+function showDeptDetail(year, dept) {
+    const title = document.getElementById('dept-detail-title');
+    const summary = document.getElementById('dept-detail-summary');
+    const openPdf = document.getElementById('dept-open-pdf');
+    if (title) title.textContent = dept;
+    if (summary) summary.textContent = deptSummaries[dept] || '';
+    if (openPdf) {
+        const link = getDeptLink(year, dept);
+        if (link) {
+            openPdf.classList.remove('disabled');
+            openPdf.href = link;
+            openPdf.removeAttribute('aria-disabled');
+            openPdf.textContent = 'Open PDF';
+        } else {
+            openPdf.classList.add('disabled');
+            openPdf.href = '#';
+            openPdf.setAttribute('aria-disabled', 'true');
+            openPdf.textContent = 'Open PDF (placeholder)';
+        }
+    }
+}
+
+// Year buttons
+document.querySelectorAll('.year-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const year = btn.dataset.year;
+        selectedYear = year;
+        document.querySelectorAll('.year-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderYear(year);
+    });
+});
+
+// Initialize with 2022 selected
+window.addEventListener('DOMContentLoaded', () => {
+    const defaultBtn = document.querySelector('.year-btn[data-year="2022"]');
+    if (defaultBtn) defaultBtn.click();
+});

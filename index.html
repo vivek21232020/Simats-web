@@ -70,6 +70,11 @@
                         <span class="nav-text">Faculty</span>
                     </button>
 
+                    <button class="side-btn" data-target="todo-subjects-section" data-tooltip="To Do Subjects">
+                        <i class="fa-solid fa-list-check"></i>
+                        <span class="nav-text">To Do _ Subjects</span>
+                    </button>
+
                     <div class="nav-divider"></div>
 
                     <a class="side-btn portal-btn" href="https://arms.sse.saveetha.com/" target="_blank" rel="noopener noreferrer" data-tooltip="ARMS Portal">
@@ -328,6 +333,44 @@
                         <div class="icon-box large"><i class="fa-solid fa-user-slash"></i></div>
                         <h3>No Faculty Found</h3>
                         <p>Try a different name or mobile number.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TO DO / SUBJECTS SECTION -->
+            <section id="todo-subjects-section" class="tool-section">
+                <div class="section-header">
+                    <div class="section-icon-wrap blue"><i class="fa-solid fa-list-check"></i></div>
+                    <div>
+                        <h2 class="section-title">To Do — Subjects</h2>
+                        <p class="section-sub">Select an academic year and open department resources.</p>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="todo-hero-strip">
+                        <div class="todo-hero-copy">
+                            <span class="todo-kicker">Subjects by Academic Year</span>
+                            <h3>One place for every department PDF</h3>
+                            <p>Pick a year, tap a department, and open its file with a clean premium layout.</p>
+                            <div class="todo-hero-stats">
+                                <div class="todo-stat"><i class="fa-solid fa-calendar-days"></i><span>4 years</span></div>
+                                <div class="todo-stat"><i class="fa-solid fa-layer-group"></i><span>18 departments</span></div>
+                                <div class="todo-stat"><i class="fa-solid fa-file-pdf"></i><span>Direct links</span></div>
+                            </div>
+                        </div>
+                        <div class="todo-hero-pill"><i class="fa-solid fa-bolt"></i><span>Fast access</span></div>
+                    </div>
+
+                    <div class="year-buttons" id="year-buttons">
+                        <button class="year-btn" data-year="2022">2022</button>
+                        <button class="year-btn" data-year="2023">2023</button>
+                        <button class="year-btn" data-year="2024">2024</button>
+                        <button class="year-btn" data-year="2025">2025</button>
+                    </div>
+
+                    <div class="dept-grid dept-grid-expanded" id="dept-list" aria-live="polite">
+                        <!-- Department cards injected here -->
                     </div>
                 </div>
             </section>
