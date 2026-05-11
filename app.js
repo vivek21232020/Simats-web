@@ -351,6 +351,35 @@ function renderFacultyDirectory(searchTerm = '') {
     if (facultyEmpty) {
         facultyEmpty.classList.toggle('hidden', filteredFaculty.length > 0);
     }
+
+    // Add staggered entrance animations and subtle 3D tilt micro-interactions
+    const cards = facultyList.querySelectorAll('.faculty-card');
+    cards.forEach((card, i) => {
+        if (!prefersReducedMotion) {
+            card.style.animationDelay = `${i * 60}ms`;
+            // trigger enter animation
+            card.classList.add('enter');
+        }
+
+        // 3D tilt on pointer move for desktop (disabled when reduced-motion)
+        if (!prefersReducedMotion) {
+            let rect = null;
+            card.addEventListener('mousemove', (ev) => {
+                rect = rect || card.getBoundingClientRect();
+                const px = ev.clientX - rect.left;
+                const py = ev.clientY - rect.top;
+                const rx = ((py - rect.height / 2) / rect.height) * -8; // rotateX
+                const ry = ((px - rect.width  / 2) / rect.width)  * 8;  // rotateY
+                card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+                card.style.transition = 'transform 0.08s linear';
+            }, { passive: true });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transition = 'transform 0.35s cubic-bezier(0.2,0.9,0.2,1)';
+                card.style.transform = '';
+            });
+        }
+    });
 }
 
 if (facultySearchInput) {
