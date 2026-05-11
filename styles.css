@@ -395,7 +395,7 @@ body {
 
 .side-btn:hover,
 .side-btn.active {
-    width: 170px;
+    width: 200px;
     max-width: calc(100vw - 56px);
     background: var(--primary-light);
     border-color: var(--border-glow);
@@ -1135,6 +1135,9 @@ input[type="number"]:focus {
     position: relative;
     overflow: hidden;
 }
+[data-theme="dark"] .faculty-card {
+    background: linear-gradient(180deg, rgba(11,22,40,0.96), rgba(8,18,34,0.92));
+}
 .faculty-card::after {
     content: '';
     position: absolute;
@@ -1248,6 +1251,9 @@ input[type="number"]:focus {
     background: linear-gradient(180deg, rgba(255,255,255,0.78), var(--surface-2)); color:var(--text-main); font-weight:800; cursor:pointer;
     box-shadow: var(--shadow-sm); transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
 }
+[data-theme="dark"] .year-btn {
+    background: linear-gradient(180deg, rgba(11,22,40,0.92), rgba(8,18,34,0.88));
+}
 .year-btn:hover { transform: translateY(-2px); border-color: var(--border-glow); box-shadow: 0 10px 24px rgba(16,185,129,0.14); }
 .year-btn.active { background: linear-gradient(135deg,var(--primary),var(--primary-h)); color:#fff; box-shadow:0 10px 28px var(--primary-glow); transform: translateY(-2px); }
 
@@ -1290,6 +1296,9 @@ input[type="number"]:focus {
     animation: deptCardIn 0.72s cubic-bezier(0.175,0.885,0.32,1.275) forwards;
     will-change: transform, box-shadow;
     transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.42s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease, background 0.3s ease, opacity 0.28s ease;
+}
+[data-theme="dark"] .dept-card {
+    background: linear-gradient(180deg, rgba(11,22,40,0.92), rgba(8,18,34,0.88));
 }
 .dept-card::before {
     content: '';
