@@ -74,6 +74,14 @@
                         <i class="fa-solid fa-list-check"></i>
                         <span class="nav-text">Department Subjects</span>
                     </button>
+                    <button class="side-btn" data-target="study-materials-section" data-tooltip="Study Materials">
+                        <i class="fa-solid fa-folder-open"></i>
+                        <span class="nav-text">Study Materials</span>
+                    </button>
+                    <button class="side-btn" data-target="events-section" data-tooltip="Events">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <span class="nav-text">Events</span>
+                    </button>
 
                     <div class="nav-divider"></div>
 
@@ -376,6 +384,135 @@
 
                     <div class="dept-grid dept-grid-expanded" id="dept-list" aria-live="polite">
                         <!-- Department cards injected here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- STUDY MATERIALS SECTION -->
+            <section id="study-materials-section" class="tool-section">
+                <div class="section-header">
+                    <div class="section-icon-wrap green"><i class="fa-solid fa-folder-open"></i></div>
+                    <div>
+                        <h2 class="section-title">Study Materials</h2>
+                        <p class="section-sub">Search subject folders quickly and keep all notes, PDFs, and resources in one place.</p>
+                    </div>
+                </div>
+
+                <div class="glass-card study-shell tilt-card">
+                    <div class="study-hero-strip">
+                        <div class="study-hero-copy">
+                            <span class="study-kicker">Subject folders</span>
+                            <h3>Fast access to every study folder</h3>
+                            <p>Organize each subject into its own folder, then use search to jump straight to the resource you need.</p>
+                        </div>
+                        <div class="study-hero-pill"><i class="fa-solid fa-bolt"></i><span>Quick search</span></div>
+                    </div>
+
+                    <div class="study-toolbar">
+                        <div class="study-search-wrap">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input id="study-search" type="search" placeholder="Search subject, folder, topic, or keyword">
+                        </div>
+                        <div class="study-count" id="study-count">0 folders</div>
+                    </div>
+
+                    <div id="study-grid" class="study-grid" aria-live="polite"></div>
+
+                    <div id="study-empty" class="study-empty hidden">
+                        <div class="icon-box large"><i class="fa-solid fa-folder-tree"></i></div>
+                        <h3>No matching folder</h3>
+                        <p>Try a different subject name or keyword.</p>
+                    </div>
+
+                    <div class="study-detail-panel" id="study-detail-panel">
+                        <div class="study-detail-main">
+                            <div class="study-detail-top">
+                                <div>
+                                    <span class="study-detail-label">Selected folder</span>
+                                    <h3 id="study-detail-title">Choose a subject folder</h3>
+                                </div>
+                                <span class="study-detail-badge" id="study-detail-badge">Ready</span>
+                            </div>
+                            <p id="study-detail-summary" class="study-detail-summary">Pick any card to see its folder name, file types, and quick notes.</p>
+                            <div class="study-detail-meta" id="study-detail-meta"></div>
+                            <div class="study-files-list" id="study-files-list"></div>
+                        </div>
+                        <div class="study-detail-side">
+                            <div class="study-folder-path" id="study-folder-path">Your folder path will appear here.</div>
+                            <a id="study-open-folder" class="btn primary-btn full-width study-open-btn disabled" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Folder
+                            </a>
+                            <p class="study-detail-note">Create one folder per subject, drop the PDFs or notes inside, and connect the path here.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EVENTS SECTION -->
+            <section id="events-section" class="tool-section">
+                <div class="section-header">
+                    <div class="section-icon-wrap blue"><i class="fa-solid fa-calendar-days"></i></div>
+                    <div>
+                        <h2 class="section-title">Events</h2>
+                        <p class="section-sub">Track ongoing events, then open the group link, photos, and details from one clean view.</p>
+                    </div>
+                </div>
+
+                <div class="glass-card events-shell tilt-card">
+                    <div class="events-hero-strip">
+                        <div class="events-hero-copy">
+                            <span class="events-kicker">Campus activity</span>
+                            <h3>Live events and quick references</h3>
+                            <p>Click an event to see the WhatsApp group, photo album, venue, and event notes in one focused panel.</p>
+                        </div>
+                        <div class="events-hero-pill"><i class="fa-solid fa-circle-play"></i><span>Ongoing updates</span></div>
+                    </div>
+
+                    <div class="events-toolbar">
+                        <div class="events-search-wrap">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input id="event-search" type="search" placeholder="Search event name, venue, or keyword">
+                        </div>
+                        <div class="events-count" id="events-count">0 events</div>
+                    </div>
+
+                    <div class="events-layout">
+                        <div>
+                            <div id="events-list" class="events-list" aria-live="polite"></div>
+                            <div id="events-empty" class="events-empty hidden">
+                                <div class="icon-box large"><i class="fa-solid fa-calendar-xmark"></i></div>
+                                <h3>No matching event</h3>
+                                <p>Try another event name or venue.</p>
+                            </div>
+                        </div>
+
+                        <aside class="event-detail-panel" id="event-detail-panel">
+                            <div class="event-detail-top">
+                                <div>
+                                    <span class="event-detail-label">Selected event</span>
+                                    <h3 id="event-detail-title">Choose an event</h3>
+                                </div>
+                                <span class="event-detail-badge" id="event-detail-badge">Live</span>
+                            </div>
+                            <p id="event-detail-summary" class="event-detail-summary">Tap an event card to see the group link, photo link, and the useful details for quick sharing.</p>
+                            <div class="event-info-grid">
+                                <div class="event-info-item"><span class="event-info-label">Date</span><strong id="event-detail-date">--</strong></div>
+                                <div class="event-info-item"><span class="event-info-label">Venue</span><strong id="event-detail-venue">--</strong></div>
+                                <div class="event-info-item"><span class="event-info-label">Coordinator</span><strong id="event-detail-owner">--</strong></div>
+                                <div class="event-info-item"><span class="event-info-label">Mode</span><strong id="event-detail-mode">--</strong></div>
+                            </div>
+                            <div class="event-link-list">
+                                <a id="event-whatsapp" class="event-link disabled" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true">
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                    <span>WhatsApp Group</span>
+                                </a>
+                                <a id="event-photos" class="event-link disabled" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true">
+                                    <i class="fa-regular fa-images"></i>
+                                    <span>Event Photos</span>
+                                </a>
+                            </div>
+                            <p class="event-detail-note">Add the live group link and the photo album link in the event data when you publish a new event.</p>
+                        </aside>
                     </div>
                 </div>
             </section>

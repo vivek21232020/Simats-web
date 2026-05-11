@@ -90,7 +90,7 @@ startParticles();
 ══════════════════════════════════════ */
 const sideButtons = document.querySelectorAll('.side-btn');
 const toolSections = document.querySelectorAll('.tool-section');
-const sectionOrder = ['home-section', 'cgpa-section', 'attendance-section', 'bunk-section', 'faculty-section', 'todo-subjects-section'];
+const sectionOrder = ['home-section', 'cgpa-section', 'attendance-section', 'bunk-section', 'faculty-section', 'todo-subjects-section', 'study-materials-section', 'events-section'];
 const drawerOverlay = document.getElementById('drawer-overlay');
 const moreOverlay = document.getElementById('more-overlay');
 const sidebarWrapper = document.getElementById('sidebar-wrapper');
@@ -447,6 +447,14 @@ function switchSection(sectionId) {
 
     if (sectionId === 'faculty-section') {
         ensureFacultyDirectoryRendered();
+    }
+
+    if (sectionId === 'study-materials-section') {
+        renderStudyMaterials(studySearchInput?.value || '');
+    }
+
+    if (sectionId === 'events-section') {
+        renderEvents(eventSearchInput?.value || '');
     }
     
     localStorage.setItem('activeSection', sectionId);
@@ -1169,3 +1177,353 @@ window.addEventListener('DOMContentLoaded', () => {
     const defaultBtn = document.querySelector('.year-btn[data-year="2022"]');
     if (defaultBtn) defaultBtn.click();
 });
+
+const studySearchInput = document.getElementById('study-search');
+
+const studyGrid = document.getElementById('study-grid');
+const studyEmpty = document.getElementById('study-empty');
+const studyCount = document.getElementById('study-count');
+const studyDetailTitle = document.getElementById('study-detail-title');
+const studyDetailBadge = document.getElementById('study-detail-badge');
+const studyDetailSummary = document.getElementById('study-detail-summary');
+const studyDetailMeta = document.getElementById('study-detail-meta');
+const studyFilesList = document.getElementById('study-files-list');
+const studyFolderPath = document.getElementById('study-folder-path');
+const studyOpenFolder = document.getElementById('study-open-folder');
+
+const eventSearchInput = document.getElementById('event-search');
+const eventsList = document.getElementById('events-list');
+const eventsEmpty = document.getElementById('events-empty');
+const eventsCount = document.getElementById('events-count');
+const eventDetailTitle = document.getElementById('event-detail-title');
+const eventDetailBadge = document.getElementById('event-detail-badge');
+const eventDetailSummary = document.getElementById('event-detail-summary');
+const eventDetailDate = document.getElementById('event-detail-date');
+const eventDetailVenue = document.getElementById('event-detail-venue');
+const eventDetailOwner = document.getElementById('event-detail-owner');
+const eventDetailMode = document.getElementById('event-detail-mode');
+const eventWhatsappLink = document.getElementById('event-whatsapp');
+const eventPhotosLink = document.getElementById('event-photos');
+
+if (studySearchInput) {
+    studySearchInput.addEventListener('input', (event) => {
+        renderStudyMaterials(event.target.value);
+    });
+}
+
+if (eventSearchInput) {
+    eventSearchInput.addEventListener('input', (event) => {
+        renderEvents(event.target.value);
+    });
+}
+
+const studyMaterials = [
+    {
+        id: 'engineering-mathematics',
+        subject: 'Engineering Mathematics',
+        folder: 'Maths',
+        category: 'Core Theory',
+        level: 'Semester 1',
+        summary: 'Use this folder for formulas, derivations, solved examples, and revision notes.',
+        files: ['Unit PDFs', 'Formula sheets', 'Solved problem sets'],
+        keywords: ['math', 'calculus', 'algebra', 'revision'],
+        folderPath: './study-materials/engineering-mathematics/',
+        accent: '#3b82f6',
+        icon: 'fa-square-root-variable',
+    },
+    {
+        id: 'programming-in-c',
+        subject: 'Programming in C',
+        folder: 'Programming in C',
+        category: 'Programming',
+        level: 'Semester 1',
+        summary: 'Keep syntax sheets, lab exercises, and program outputs inside this folder.',
+        files: ['Lab programs', 'Syntax notes', 'Viva questions'],
+        keywords: ['c', 'programming', 'lab', 'syntax'],
+        folderPath: './study-materials/programming-in-c/',
+        accent: '#10b981',
+        icon: 'fa-code',
+    },
+    {
+        id: 'data-structures',
+        subject: 'Data Structures',
+        folder: 'Data Structures',
+        category: 'Programming',
+        level: 'Semester 2',
+        summary: 'Store notes, algorithms, and practice sheets for trees, stacks, queues, and graphs.',
+        files: ['Algorithms notes', 'Practice questions', 'Lab sheets'],
+        keywords: ['ds', 'trees', 'graphs', 'algorithms'],
+        folderPath: './study-materials/data-structures/',
+        accent: '#f59e0b',
+        icon: 'fa-diagram-project',
+    },
+    {
+        id: 'database-systems',
+        subject: 'Database Systems',
+        folder: 'Database Systems',
+        category: 'Systems',
+        level: 'Semester 3',
+        summary: 'Keep ER diagrams, SQL examples, and theory PDFs ready for quick revision.',
+        files: ['SQL queries', 'ER diagrams', 'Question bank'],
+        keywords: ['dbms', 'sql', 'database', 'queries'],
+        folderPath: './study-materials/database-systems/',
+        accent: '#8b5cf6',
+        icon: 'fa-database',
+    },
+    {
+        id: 'computer-networks',
+        subject: 'Computer Networks',
+        folder: 'Computer Networks',
+        category: 'Systems',
+        level: 'Semester 4',
+        summary: 'Add protocol notes, diagram sheets, and unit-wise revision material here.',
+        files: ['Protocol charts', 'Notes', 'Important questions'],
+        keywords: ['networks', 'protocol', 'osi', 'tcp'],
+        folderPath: './study-materials/computer-networks/',
+        accent: '#06b6d4',
+        icon: 'fa-network-wired',
+    },
+    {
+        id: 'operating-systems',
+        subject: 'Operating Systems',
+        folder: 'Operating Systems',
+        category: 'Systems',
+        level: 'Semester 4',
+        summary: 'Keep process, memory, and scheduling notes in one quick-access folder.',
+        files: ['Unit notes', 'Problem sheets', 'Viva prep'],
+        keywords: ['os', 'process', 'memory', 'scheduling'],
+        folderPath: './study-materials/operating-systems/',
+        accent: '#ef4444',
+        icon: 'fa-server',
+    },
+];
+
+const campusEvents = [
+    {
+        id: 'tech-symposium',
+        title: 'Tech Symposium 2026',
+        status: 'Ongoing',
+        date: '11 May 2026',
+        venue: 'Main Auditorium',
+        coordinator: 'Department Team',
+        mode: 'On Campus',
+        summary: 'A live technical showcase with workshops, presentations, and team activities.',
+        keywords: ['tech', 'symposium', 'auditorium', 'workshop'],
+        whatsappUrl: '',
+        photosUrl: '',
+        accent: '#10b981',
+        icon: 'fa-microphone-lines',
+    },
+    {
+        id: 'project-expo',
+        title: 'Project Expo',
+        status: 'Ongoing',
+        date: '11 May 2026',
+        venue: 'Project Hall',
+        coordinator: 'Faculty Coordinators',
+        mode: 'On Campus',
+        summary: 'Project teams can share demo videos, poster links, and photo coverage here.',
+        keywords: ['expo', 'project', 'demo', 'poster'],
+        whatsappUrl: '',
+        photosUrl: '',
+        accent: '#3b82f6',
+        icon: 'fa-display',
+    },
+    {
+        id: 'placement-drive',
+        title: 'Placement Drive',
+        status: 'Upcoming',
+        date: '15 May 2026',
+        venue: 'Placement Cell',
+        coordinator: 'Training & Placement',
+        mode: 'On Campus',
+        summary: 'Interview schedules, company updates, and group info can be tracked from here.',
+        keywords: ['placement', 'company', 'interview', 'drive'],
+        whatsappUrl: '',
+        photosUrl: '',
+        accent: '#f59e0b',
+        icon: 'fa-briefcase',
+    },
+    {
+        id: 'sports-day',
+        title: 'Sports Day',
+        status: 'Upcoming',
+        date: '18 May 2026',
+        venue: 'Campus Grounds',
+        coordinator: 'Sports Committee',
+        mode: 'On Campus',
+        summary: 'Track fixtures, event highlights, and the photo album for all matches and finals.',
+        keywords: ['sports', 'grounds', 'matches', 'fixtures'],
+        whatsappUrl: '',
+        photosUrl: '',
+        accent: '#8b5cf6',
+        icon: 'fa-trophy',
+    },
+];
+
+let selectedStudyMaterialId = studyMaterials.length ? studyMaterials[0].id : '';
+let selectedEventId = campusEvents.length ? campusEvents[0].id : '';
+
+function setLinkState(anchor, href) {
+    if (!anchor) return;
+    const hasLink = Boolean(href);
+    anchor.classList.toggle('disabled', !hasLink);
+    anchor.setAttribute('aria-disabled', String(!hasLink));
+    if (hasLink) {
+        anchor.href = href;
+        anchor.target = '_blank';
+        anchor.rel = 'noopener noreferrer';
+    } else {
+        anchor.href = '#';
+    }
+}
+
+function renderStudyDetail(item) {
+    if (!item) return;
+
+    if (studyDetailTitle) studyDetailTitle.textContent = item.subject;
+    if (studyDetailBadge) studyDetailBadge.textContent = item.category;
+    if (studyDetailSummary) studyDetailSummary.textContent = item.summary;
+    if (studyFolderPath) studyFolderPath.textContent = item.folderPath;
+
+    if (studyDetailMeta) {
+        studyDetailMeta.innerHTML = `
+            <span class="study-detail-chip"><i class="fa-solid fa-folder-tree"></i>${item.folder}</span>
+            <span class="study-detail-chip"><i class="fa-solid fa-layer-group"></i>${item.level}</span>
+            <span class="study-detail-chip"><i class="fa-solid fa-tags"></i>${item.category}</span>
+        `;
+    }
+
+    if (studyFilesList) {
+        studyFilesList.innerHTML = item.files.map((file) => `
+            <div class="study-file-item">
+                <i class="fa-solid fa-file-lines"></i>
+                <span>${file}</span>
+            </div>
+        `).join('');
+    }
+
+    setLinkState(studyOpenFolder, item.folderPath);
+}
+
+function renderStudyMaterials(searchTerm = '') {
+    if (!studyGrid) return;
+
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+    const filteredMaterials = studyMaterials.filter((item) => {
+        const haystack = [item.subject, item.folder, item.category, item.level, item.summary, ...(item.keywords || [])]
+            .join(' ')
+            .toLowerCase();
+        return !normalizedSearch || haystack.includes(normalizedSearch);
+    });
+
+    if (studyCount) {
+        studyCount.textContent = `${filteredMaterials.length} folder${filteredMaterials.length === 1 ? '' : 's'}`;
+    }
+
+    if (studyEmpty) {
+        studyEmpty.classList.toggle('hidden', filteredMaterials.length > 0);
+    }
+
+    if (!filteredMaterials.some((item) => item.id === selectedStudyMaterialId) && filteredMaterials.length > 0) {
+        selectedStudyMaterialId = filteredMaterials[0].id;
+    }
+
+    studyGrid.innerHTML = filteredMaterials.map((item, index) => `
+        <article class="study-card ${item.id === selectedStudyMaterialId ? 'selected' : ''}" data-study-id="${item.id}" style="--study-accent:${item.accent}; --study-accent-bg:${item.accent}1f; --study-accent-soft:${item.accent}33; animation-delay:${index * 40}ms">
+            <div class="study-card-top">
+                <div class="study-card-icon"><i class="fa-solid ${item.icon}"></i></div>
+                <span class="study-card-pill">Folder</span>
+            </div>
+            <div class="study-card-body">
+                <h3>${item.subject}</h3>
+                <p>${item.summary}</p>
+            </div>
+            <div class="study-card-meta">
+                <span>${item.folder}</span>
+                <span>${item.level}</span>
+            </div>
+        </article>
+    `).join('');
+
+    studyGrid.querySelectorAll('.study-card').forEach((card) => {
+        card.addEventListener('click', () => {
+            selectedStudyMaterialId = card.dataset.studyId || selectedStudyMaterialId;
+            renderStudyMaterials(studySearchInput?.value || '');
+        });
+    });
+
+    const activeStudy = studyMaterials.find((item) => item.id === selectedStudyMaterialId) || filteredMaterials[0] || studyMaterials[0];
+    renderStudyDetail(activeStudy);
+}
+
+function renderEventDetail(item) {
+    if (!item) return;
+
+    if (eventDetailTitle) eventDetailTitle.textContent = item.title;
+    if (eventDetailBadge) eventDetailBadge.textContent = item.status;
+    if (eventDetailSummary) eventDetailSummary.textContent = item.summary;
+    if (eventDetailDate) eventDetailDate.textContent = item.date;
+    if (eventDetailVenue) eventDetailVenue.textContent = item.venue;
+    if (eventDetailOwner) eventDetailOwner.textContent = item.coordinator;
+    if (eventDetailMode) eventDetailMode.textContent = item.mode;
+
+    setLinkState(eventWhatsappLink, item.whatsappUrl);
+    setLinkState(eventPhotosLink, item.photosUrl);
+}
+
+function renderEvents(searchTerm = '') {
+    if (!eventsList) return;
+
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+    const filteredEvents = campusEvents.filter((item) => {
+        const haystack = [item.title, item.status, item.date, item.venue, item.coordinator, item.mode, item.summary, ...(item.keywords || [])]
+            .join(' ')
+            .toLowerCase();
+        return !normalizedSearch || haystack.includes(normalizedSearch);
+    });
+
+    if (eventsCount) {
+        eventsCount.textContent = `${filteredEvents.length} event${filteredEvents.length === 1 ? '' : 's'}`;
+    }
+
+    if (eventsEmpty) {
+        eventsEmpty.classList.toggle('hidden', filteredEvents.length > 0);
+    }
+
+    if (!filteredEvents.some((item) => item.id === selectedEventId) && filteredEvents.length > 0) {
+        selectedEventId = filteredEvents[0].id;
+    }
+
+    eventsList.innerHTML = filteredEvents.map((item, index) => `
+        <article class="event-card ${item.id === selectedEventId ? 'selected' : ''}" data-event-id="${item.id}" style="--event-accent:${item.accent}; --event-accent-bg:${item.accent}1a; --event-accent-soft:${item.accent}33; animation-delay:${index * 45}ms">
+            <div class="event-card-head">
+                <div class="event-card-icon"><i class="fa-solid ${item.icon}"></i></div>
+                <div class="event-card-copy">
+                    <div class="event-card-title-row">
+                        <h3>${item.title}</h3>
+                        <span class="event-card-status">${item.status}</span>
+                    </div>
+                    <p>${item.summary}</p>
+                </div>
+            </div>
+            <div class="event-card-meta">
+                <span><i class="fa-solid fa-calendar-day"></i>${item.date}</span>
+                <span><i class="fa-solid fa-location-dot"></i>${item.venue}</span>
+            </div>
+        </article>
+    `).join('');
+
+    eventsList.querySelectorAll('.event-card').forEach((card) => {
+        card.addEventListener('click', () => {
+            selectedEventId = card.dataset.eventId || selectedEventId;
+            renderEvents(eventSearchInput?.value || '');
+        });
+    });
+
+    const activeEvent = campusEvents.find((item) => item.id === selectedEventId) || filteredEvents[0] || campusEvents[0];
+    renderEventDetail(activeEvent);
+}
+
+renderStudyMaterials();
+renderEvents();
