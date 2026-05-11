@@ -648,18 +648,21 @@ document.getElementById('reset-cgpa').addEventListener('click', () => {
 document.getElementById('calc-attendance').addEventListener('click', () => {
     const total    = parseInt(document.getElementById('total-classes').value);
     const attended = parseInt(document.getElementById('attended-classes').value);
-
-    if (!total || !attended || attended > total) {
+    // Validate inputs (allow attended = 0)
+    if (isNaN(total) || isNaN(attended) || total <= 0 || attended < 0 || attended > total) {
         alert('Please enter valid class numbers.');
         return;
     }
 
     const pct = ((attended / total) * 100).toFixed(2);
-    const deficit = Math.ceil(0.8 * total) - attended;
+    const deficit = Math.max(0, Math.ceil(0.8 * total) - attended);
 
     let desc = '';
     if (pct >= 80) {
-        const canBunk = Math.floor((attended - 0.8 * total) / (1 - 0.8));
+        // Correct formula: find max X such that attended / (total + X) >= 0.8
+        // attended >= 0.8 * (total + X)  =>  X <= (attended - 0.8*total) / 0.8
+        const raw = (attended - 0.8 * total) / 0.8;
+        const canBunk = Math.max(0, Math.floor(raw));
         desc = `✅ You're safe! You can still miss up to ${canBunk} class${canBunk !== 1 ? 'es' : ''}.`;
     } else {
         desc = `⚠️ Below 80%! Attend ${deficit} more class${deficit !== 1 ? 'es' : ''} to recover.`;
@@ -838,8 +841,57 @@ themeToggles.forEach(toggle => {
 ══════════════════════════════════════ */
 
 function captureNodeAsBlob(node) {
-    return html2canvas(node, { useCORS: true, backgroundColor: null, scale: Math.min(2, window.devicePixelRatio || 1) })
-        .then(canvas => new Promise(resolve => canvas.toBlob(resolve, 'image/png')));
+    // Keep legacy function but route through export-friendly capture
+    return exportCapture(node).then(canvas => new Promise(resolve => canvas.toBlob(resolve, 'image/png')));
+}
+
+/**
+ * Create an off-screen clone of `node`, force a solid background (no alpha),
+ * capture it with html2canvas and remove the clone. Returns the canvas.
+ */
+async function exportCapture(node) {
+    if (!node) throw new Error('No node provided for exportCapture');
+
+    // Clone node to avoid mutating original
+    const clone = node.cloneNode(true);
+    const rect = node.getBoundingClientRect();
+
+    // Compute a solid background color from computed style (fallback to white/dark)
+    const computed = window.getComputedStyle(node);
+    let bg = computed.backgroundColor;
+    if (!bg || bg === 'transparent' || bg === 'rgba(0, 0, 0, 0)') {
+        const theme = document.documentElement.getAttribute('data-theme') || 'light';
+        bg = theme === 'dark' ? '#07111f' : '#ffffff';
+    }
+
+    // Apply inline styles to the clone to ensure consistent export rendering
+    clone.style.boxSizing = 'border-box';
+    clone.style.background = bg;
+    clone.style.width = rect.width + 'px';
+    clone.style.height = rect.height + 'px';
+    clone.style.margin = '0';
+    clone.style.transition = 'none';
+    clone.style.removeProperty = 'transform';
+
+    // Wrap the clone inside a fixed container off-screen so fonts and images render
+    const container = document.createElement('div');
+    container.style.position = 'fixed';
+    container.style.left = '-20000px';
+    container.style.top = '0';
+    container.style.padding = '20px';
+    container.style.background = bg;
+    container.style.zIndex = '99999';
+    container.appendChild(clone);
+    document.body.appendChild(container);
+
+    try {
+        const scale = Math.min(2, window.devicePixelRatio || 1);
+        const canvas = await html2canvas(clone, { useCORS: true, backgroundColor: bg, scale });
+        return canvas;
+    } finally {
+        // clean up
+        container.remove();
+    }
 }
 
 function downloadBlob(blob, filename) {
@@ -863,7 +915,7 @@ async function downloadNodeImage(selector, filename) {
 async function downloadNodePDF(selector, filename) {
     const node = document.querySelector(selector);
     if (!node) { alert('Export target not found.'); return; }
-    const canvas = await html2canvas(node, { useCORS: true, backgroundColor: null, scale: Math.min(2, window.devicePixelRatio || 1) });
+    const canvas = await exportCapture(node);
     const imgData = canvas.toDataURL('image/png');
     const { jsPDF } = window.jspdf || window.jspdf || {};
     const PdfConstructor = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf.jsPDF : (window.jsPDF ? window.jsPDF : null);
