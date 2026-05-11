@@ -1,32 +1,164 @@
 /* ══════════════════════════════════════
    PARTICLES
 ══════════════════════════════════════ */
-function createParticles() {
-    const container = document.getElementById('particles');
-    if (!container) return;
-    const count = 18;
-    for (let i = 0; i < count; i++) {
-        const p = document.createElement('div');
-        p.classList.add('particle');
-        const size = Math.random() * 12 + 5;
-        p.style.cssText = `
-            width: ${size}px;
-            height: ${size}px;
-            left: ${Math.random() * 100}%;
-            animation-duration: ${Math.random() * 14 + 10}s;
-            animation-delay: ${Math.random() * 12}s;
-            opacity: 0;
-        `;
-        container.appendChild(p);
-    }
+const particleCanvas = document.getElementById('particle-canvas');
+const particleContext = particleCanvas ? particleCanvas.getContext('2d') : null;
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let particleFrameId = null;
+let particlePool = [];
+
+function resizeParticleCanvas() {
+    if (!particleCanvas || !particleContext) return;
+    const ratio = window.devicePixelRatio || 1;
+    particleCanvas.width = Math.floor(window.innerWidth * ratio);
+    particleCanvas.height = Math.floor(window.innerHeight * ratio);
+    particleContext.setTransform(ratio, 0, 0, ratio, 0, 0);
 }
-createParticles();
+
+function createParticles() {
+    if (!particleContext || prefersReducedMotion) return;
+    const count = window.innerWidth < 768 ? 14 : 24;
+    particlePool = Array.from({ length: count }, () => ({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.22,
+        radius: Math.random() * 1.9 + 0.7,
+        alpha: Math.random() * 0.45 + 0.15,
+        hue: Math.random() > 0.5 ? 160 : 190
+    }));
+}
+
+function renderParticles() {
+    if (!particleContext || prefersReducedMotion) return;
+
+    particleContext.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+    particlePool.forEach((particle, index) => {
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+
+        if (particle.x < -20) particle.x = window.innerWidth + 20;
+        if (particle.x > window.innerWidth + 20) particle.x = -20;
+        if (particle.y < -20) particle.y = window.innerHeight + 20;
+        if (particle.y > window.innerHeight + 20) particle.y = -20;
+
+        particleContext.beginPath();
+        particleContext.fillStyle = `hsla(${particle.hue}, 100%, 72%, ${particle.alpha})`;
+        particleContext.shadowBlur = 18;
+        particleContext.shadowColor = `hsla(${particle.hue}, 100%, 70%, 0.55)`;
+        particleContext.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+        particleContext.fill();
+
+        for (let j = index + 1; j < particlePool.length; j++) {
+            const other = particlePool[j];
+            const dx = particle.x - other.x;
+            const dy = particle.y - other.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < 140) {
+                particleContext.beginPath();
+                particleContext.strokeStyle = `rgba(52, 211, 153, ${0.08 * (1 - distance / 140)})`;
+                particleContext.lineWidth = 1;
+                particleContext.moveTo(particle.x, particle.y);
+                particleContext.lineTo(other.x, other.y);
+                particleContext.stroke();
+            }
+        }
+    });
+
+    particleFrameId = requestAnimationFrame(renderParticles);
+}
+
+function startParticles() {
+    if (!particleContext || prefersReducedMotion) return;
+    resizeParticleCanvas();
+    createParticles();
+    if (particleFrameId) cancelAnimationFrame(particleFrameId);
+    renderParticles();
+}
+
+window.addEventListener('resize', () => {
+    if (!particleContext || prefersReducedMotion) return;
+    resizeParticleCanvas();
+    createParticles();
+});
+
+startParticles();
 
 /* ══════════════════════════════════════
    NAVIGATION
 ══════════════════════════════════════ */
 const sideButtons = document.querySelectorAll('.side-btn');
 const toolSections = document.querySelectorAll('.tool-section');
+const sectionOrder = ['home-section', 'cgpa-section', 'attendance-section', 'bunk-section'];
+const drawerOverlay = document.getElementById('drawer-overlay');
+const moreOverlay = document.getElementById('more-overlay');
+const sidebarWrapper = document.getElementById('sidebar-wrapper');
+const hamburgerBtn = document.getElementById('hamburger-btn');
+const moreDrawer = document.getElementById('more-drawer');
+const moreToggle = document.getElementById('bnav-more');
+const floatingActionBtn = document.getElementById('floating-action-btn');
+const pageTransition = document.getElementById('page-transition');
+const mainContent = document.getElementById('main-content');
+
+function flashPageTransition() {
+    if (!pageTransition || prefersReducedMotion) return;
+    pageTransition.classList.add('active');
+    window.clearTimeout(flashPageTransition.timeoutId);
+    flashPageTransition.timeoutId = window.setTimeout(() => {
+        pageTransition.classList.remove('active');
+    }, 260);
+}
+
+function closeSidebar() {
+    if (!sidebarWrapper || !drawerOverlay) return;
+    sidebarWrapper.classList.remove('drawer-open');
+    drawerOverlay.classList.remove('visible');
+    if (hamburgerBtn) hamburgerBtn.classList.remove('open');
+}
+
+function openSidebar() {
+    if (!sidebarWrapper || !drawerOverlay) return;
+    sidebarWrapper.classList.add('drawer-open');
+    drawerOverlay.classList.add('visible');
+    if (hamburgerBtn) hamburgerBtn.classList.add('open');
+}
+
+function toggleSidebar() {
+    if (!sidebarWrapper) return;
+    if (sidebarWrapper.classList.contains('drawer-open')) closeSidebar();
+    else openSidebar();
+}
+
+function closeMoreDrawer() {
+    if (!moreDrawer || !moreOverlay) return;
+    moreDrawer.classList.remove('open');
+    moreOverlay.classList.remove('visible');
+}
+
+function openMoreDrawer() {
+    if (!moreDrawer || !moreOverlay) return;
+    moreDrawer.classList.add('open');
+    moreOverlay.classList.add('visible');
+}
+
+function toggleMoreDrawer() {
+    if (!moreDrawer) return;
+    if (moreDrawer.classList.contains('open')) closeMoreDrawer();
+    else openMoreDrawer();
+}
+
+function getActiveSectionIndex() {
+    const activeSection = document.querySelector('.tool-section.active-section');
+    return Math.max(0, sectionOrder.indexOf(activeSection?.id || 'home-section'));
+}
+
+function goToAdjacentSection(direction) {
+    const currentIndex = getActiveSectionIndex();
+    const nextIndex = Math.min(sectionOrder.length - 1, Math.max(0, currentIndex + direction));
+    if (nextIndex === currentIndex) return;
+    switchSection(sectionOrder[nextIndex]);
+}
 
 function switchSection(sectionId) {
     const targetBtn = document.querySelector(`[data-target="${sectionId}"]`);
@@ -52,6 +184,19 @@ function switchSection(sectionId) {
     }
     
     localStorage.setItem('activeSection', sectionId);
+
+    flashPageTransition();
+    if (window.innerWidth < 769) {
+        closeSidebar();
+        closeMoreDrawer();
+    }
+
+    window.requestAnimationFrame(() => {
+        const mainTarget = document.getElementById(sectionId);
+        if (mainTarget) {
+            mainTarget.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
+        }
+    });
 }
 
 sideButtons.forEach(btn => {
@@ -73,11 +218,65 @@ bnavButtons.forEach(btn => {
     btn.addEventListener('click', () => {
         const target = btn.dataset.target;
         switchSection(target);
-        
-        bnavButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
     });
 });
+
+if (hamburgerBtn) {
+    hamburgerBtn.addEventListener('click', toggleSidebar);
+}
+
+if (drawerOverlay) {
+    drawerOverlay.addEventListener('click', closeSidebar);
+}
+
+if (moreToggle) {
+    moreToggle.addEventListener('click', toggleMoreDrawer);
+}
+
+if (moreOverlay) {
+    moreOverlay.addEventListener('click', closeMoreDrawer);
+}
+
+if (floatingActionBtn) {
+    floatingActionBtn.addEventListener('click', () => {
+        toggleMoreDrawer();
+    });
+}
+
+if (moreDrawer) {
+    moreDrawer.addEventListener('touchstart', (event) => {
+        moreDrawer.dataset.touchStartY = String(event.touches[0].clientY);
+    }, { passive: true });
+
+    moreDrawer.addEventListener('touchend', (event) => {
+        const startY = parseFloat(moreDrawer.dataset.touchStartY || '0');
+        const endY = event.changedTouches[0].clientY;
+        if (startY && endY - startY > 60) {
+            closeMoreDrawer();
+        }
+    }, { passive: true });
+}
+
+if (mainContent) {
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    mainContent.addEventListener('touchstart', (event) => {
+        touchStartX = event.touches[0].clientX;
+        touchStartY = event.touches[0].clientY;
+    }, { passive: true });
+
+    mainContent.addEventListener('touchend', (event) => {
+        const touchEndX = event.changedTouches[0].clientX;
+        const touchEndY = event.changedTouches[0].clientY;
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+
+        if (Math.abs(deltaX) < 60 || Math.abs(deltaX) < Math.abs(deltaY)) return;
+        if (deltaX < 0) goToAdjacentSection(1);
+        else goToAdjacentSection(-1);
+    }, { passive: true });
+}
 
 /* Get Started button */
 const getStartedBtn = document.getElementById('get-started-btn');
@@ -389,6 +588,12 @@ function updateThemeIcons(theme) {
     const togglePill = document.getElementById('theme-pill');
     if (togglePill) {
         togglePill.classList.toggle('on', theme === 'dark');
+    }
+
+    if (pageTransition) {
+        pageTransition.style.background = theme === 'dark'
+            ? 'radial-gradient(circle at center, rgba(16,185,129,0.24), transparent 45%), linear-gradient(135deg, rgba(3,8,20,0.05), rgba(16,185,129,0.14), rgba(59,130,246,0.08))'
+            : 'radial-gradient(circle at center, rgba(16,185,129,0.18), transparent 45%), linear-gradient(135deg, rgba(255,255,255,0.18), rgba(16,185,129,0.1), rgba(59,130,246,0.08))';
     }
 }
 
