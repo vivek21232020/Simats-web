@@ -190,6 +190,10 @@
                                 <div class="grade-stat"><span class="stat-label">Highest Grade</span><span class="stat-value" id="highest-grade">--</span></div>
                                 <div class="grade-stat"><span class="stat-label">Avg Grade Pts</span><span class="stat-value" id="avg-grade">--</span></div>
                             </div>
+                            <div class="download-actions">
+                                <button id="cgpa-download-img" class="btn small-btn"><i class="fa-solid fa-image"></i> Image</button>
+                                <button id="cgpa-download-pdf" class="btn small-btn outline-btn"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -239,6 +243,10 @@
                                 <div class="ring-center-text" id="att-ring-label">0%</div>
                             </div>
                             <p id="att-desc" class="result-desc"></p>
+                            <div class="download-actions">
+                                <button id="att-download-img" class="btn small-btn"><i class="fa-solid fa-image"></i> Image</button>
+                                <button id="att-download-pdf" class="btn small-btn outline-btn"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -285,6 +293,10 @@
                             <h3 id="bunk-title" class="result-title">Bunk Analysis</h3>
                             <div id="bunk-huge" class="huge-result mono"></div>
                             <p id="bunk-desc" class="result-desc"></p>
+                            <div class="download-actions">
+                                <button id="bunk-download-img" class="btn small-btn"><i class="fa-solid fa-image"></i> Image</button>
+                                <button id="bunk-download-pdf" class="btn small-btn outline-btn"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -339,6 +351,8 @@
 
     <div class="page-transition" id="page-transition" aria-hidden="true"></div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

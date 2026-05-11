@@ -603,4 +603,67 @@ themeToggles.forEach(toggle => {
     }
 });
 
+/* ══════════════════════════════════════
+   EXPORT (IMAGE / PDF) HELPERS
+══════════════════════════════════════ */
+
+function captureNodeAsBlob(node) {
+    return html2canvas(node, { useCORS: true, backgroundColor: null, scale: Math.min(2, window.devicePixelRatio || 1) })
+        .then(canvas => new Promise(resolve => canvas.toBlob(resolve, 'image/png')));
+}
+
+function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+async function downloadNodeImage(selector, filename) {
+    const node = document.querySelector(selector);
+    if (!node) { alert('Export target not found.'); return; }
+    const blob = await captureNodeAsBlob(node);
+    if (blob) downloadBlob(blob, filename);
+}
+
+async function downloadNodePDF(selector, filename) {
+    const node = document.querySelector(selector);
+    if (!node) { alert('Export target not found.'); return; }
+    const canvas = await html2canvas(node, { useCORS: true, backgroundColor: null, scale: Math.min(2, window.devicePixelRatio || 1) });
+    const imgData = canvas.toDataURL('image/png');
+    const { jsPDF } = window.jspdf || window.jspdf || {};
+    const PdfConstructor = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf.jsPDF : (window.jsPDF ? window.jsPDF : null);
+    const pdfLib = PdfConstructor || (typeof jsPDF === 'function' ? jsPDF : null);
+    if (!pdfLib) {
+        alert('PDF library not available.');
+        return;
+    }
+    const pdf = new pdfLib('p', 'pt', 'a4');
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const imgWidth = pdfWidth - 40;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    pdf.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
+    pdf.save(filename + '.pdf');
+}
+
+function makeFilename(base) {
+    const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+    return `${base}_${stamp}`;
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('cgpa-download-img')?.addEventListener('click', () => downloadNodeImage('#cgpa-result-state', makeFilename('CGPA_Report') + '.png'));
+    document.getElementById('cgpa-download-pdf')?.addEventListener('click', () => downloadNodePDF('#cgpa-result-state', makeFilename('CGPA_Report')));
+
+    document.getElementById('att-download-img')?.addEventListener('click', () => downloadNodeImage('#att-result-state', makeFilename('Attendance_Report') + '.png'));
+    document.getElementById('att-download-pdf')?.addEventListener('click', () => downloadNodePDF('#att-result-state', makeFilename('Attendance_Report')));
+
+    document.getElementById('bunk-download-img')?.addEventListener('click', () => downloadNodeImage('#bunk-result-state', makeFilename('Bunk_Report') + '.png'));
+    document.getElementById('bunk-download-pdf')?.addEventListener('click', () => downloadNodePDF('#bunk-result-state', makeFilename('Bunk_Report')));
+});
+
 initTheme();
