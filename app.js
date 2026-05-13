@@ -1113,6 +1113,25 @@ departments.forEach(d => {
 });
 
 const pdfLinks = {
+    '2023': {
+        'AGRI': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/AGRI%202023.pdf',
+        'AIDS': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/AIDS%202023.pdf',
+        'AIML': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/AIML%202023.pdf',
+        'BI': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/BI%202023.pdf',
+        'BME': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/BME%202023.pdf',
+        'BT': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/BT%202023.pdf',
+        'CIVIL': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/CIVIL%202023.pdf',
+        'CSBS': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/CSBS%202023.pdf',
+        'CSE': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/CSE%20CS.pdf',
+        'CSE - ARTIFICIAL INTELLIGENCE': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/CSE%20AI.pdf',
+        'CSE - BIOSCIENCE': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/CSE%20BIO%202023.pdf',
+        'CSE - IOT': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/CSE%20IOT%202023.pdf',
+        'ECE': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/ECE%202023.pdf',
+        'EEE': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/EEE%202023.pdf',
+        'ENEE': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/ENEE%202023.pdf',
+        'IT': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/IT%202023.pdf',
+        'MECH': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/MECH%202023.pdf'
+    },
     '2024': {
         'AGRI': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024%20AGRI.pdf'
         , 'AIDS': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024%20AIDS.pdf'
@@ -1133,9 +1152,9 @@ const pdfLinks = {
         , 'MECH': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024%20MECH.pdf'
         , 'AIML': 'https://kxxflaefgmjeildvstlp.supabase.co/storage/v1/object/public/AGRI/2024-AIML.pdf'
     }
-}; // { '2022': { 'CSE': 'https://...' } } — to be filled later
+}; // { '2023': { 'CSE': 'https://...' } } — to be filled later
 
-let selectedYear = '2022';
+let selectedYear = '2023';
 
 function getDeptLink(year, dept) {
     return (pdfLinks[year] && pdfLinks[year][dept]) || '';
@@ -1239,9 +1258,9 @@ document.querySelectorAll('.year-btn').forEach(btn => {
     });
 });
 
-// Initialize with 2022 selected
+// Initialize with 2023 selected
 window.addEventListener('DOMContentLoaded', () => {
-    const defaultBtn = document.querySelector('.year-btn[data-year="2022"]');
+    const defaultBtn = document.querySelector('.year-btn[data-year="2023"]');
     if (defaultBtn) defaultBtn.click();
 });
 
