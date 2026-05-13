@@ -1441,16 +1441,10 @@ const popupClose = document.getElementById('popup-close');
 const popupButtons = document.querySelectorAll('.popup-btn');
 
 let popupShown = false;
-const POPUP_SHOW_DELAY = 2800; // Show popup after 2.8 seconds
-const POPUP_AUTO_HIDE_TIME = 15000; // Auto-hide after 15 seconds
+const POPUP_SHOW_DELAY = 6000; // Show popup after 6 seconds of page being open
+const POPUP_AUTO_HIDE_TIME = 18000; // Auto-hide after 18 seconds
 let popupTimeout = null;
 let popupAutoHideTimeout = null;
-let hasUserInteracted = false;
-
-// Track if user has interacted with page
-document.addEventListener('click', () => {
-    hasUserInteracted = true;
-}, { once: true, passive: true });
 
 function showPortfolioPopup() {
     if (popupShown) return;
@@ -1481,15 +1475,13 @@ function hidePortfolioPopup() {
     }
 }
 
-// Enhanced page load with delay
+// Show popup after user has been on page for a few seconds
 window.addEventListener('load', () => {
     if (popupTimeout) clearTimeout(popupTimeout);
     
-    // Only show popup if user is engaged enough
+    // Show popup after the specified delay, regardless of user interaction
     popupTimeout = setTimeout(() => {
-        if (hasUserInteracted || window.innerWidth > 768) {
-            showPortfolioPopup();
-        }
+        showPortfolioPopup();
     }, POPUP_SHOW_DELAY);
 });
 
@@ -1553,28 +1545,6 @@ popupButtons.forEach((btn) => {
     });
 });
 
-// Scroll-based popup trigger
-let lastScrollPosition = 0;
-let scrollShowTriggered = false;
-
-window.addEventListener('scroll', () => {
-    const scrollPosition = window.innerHeight + window.scrollY;
-    const documentHeight = document.documentElement.scrollHeight;
-    
-    // If user scrolls near bottom and popup hasn't been shown
-    if (scrollPosition > documentHeight - 600 && !popupShown && !scrollShowTriggered) {
-        scrollShowTriggered = true;
-        // Small delay to avoid immediate show on load
-        setTimeout(() => {
-            if (!popupShown) {
-                showPortfolioPopup();
-            }
-        }, 400);
-    }
-    
-    lastScrollPosition = scrollPosition;
-}, { passive: true });
-
 // Handle keyboard interactions
 document.addEventListener('keydown', (e) => {
     // Press 'Escape' to close popup
@@ -1592,16 +1562,6 @@ window.addEventListener('beforeunload', () => {
 // Show popup on manual trigger (optional)
 window.showPortfolioPopup = showPortfolioPopup;
 window.hidePortfolioPopup = hidePortfolioPopup;
-
-// Enhanced mobile interaction
-if (window.innerWidth <= 640) {
-    // Show popup faster on mobile
-    const mobilePopupTimeout = setTimeout(() => {
-        if (!popupShown) {
-            showPortfolioPopup();
-        }
-    }, 3500);
-}
 
 function setLinkState(anchor, href) {
     if (!anchor) return;
