@@ -345,6 +345,9 @@ Dr.Sivakumar - 9790973774
 Dr.Siva Sankar.V - 9952597610
 Dr.Rajkumar - 9894534789
 Dr.K.Prabakaran - 9786846377
+DR.Ganesh Kumar K - 7358738681
+Dr manimaran - 9841605327
+amandeep singh - 8825814363
 `.trim();
 
 const facultyDirectory = facultyRawData.split(/\n+/).map((line) => {
@@ -1427,6 +1430,178 @@ const campusEvents = [
 
 let selectedStudyMaterialId = studyMaterials.length ? studyMaterials[0].id : '';
 let selectedEventId = campusEvents.length ? campusEvents[0].id : '';
+
+/* ══════════════════════════════════════
+   PORTFOLIO POPUP - PREMIUM EXPERIENCE
+══════════════════════════════════════ */
+
+const portfolioPopup = document.getElementById('portfolio-popup');
+const popupOverlay = document.getElementById('portfolio-popup-overlay');
+const popupClose = document.getElementById('popup-close');
+const popupButtons = document.querySelectorAll('.popup-btn');
+
+let popupShown = false;
+const POPUP_SHOW_DELAY = 2800; // Show popup after 2.8 seconds
+const POPUP_AUTO_HIDE_TIME = 15000; // Auto-hide after 15 seconds
+let popupTimeout = null;
+let popupAutoHideTimeout = null;
+let hasUserInteracted = false;
+
+// Track if user has interacted with page
+document.addEventListener('click', () => {
+    hasUserInteracted = true;
+}, { once: true, passive: true });
+
+function showPortfolioPopup() {
+    if (popupShown) return;
+    
+    popupShown = true;
+    portfolioPopup.classList.add('active');
+    popupOverlay.classList.add('active');
+    
+    // Trigger a small vibration if supported
+    if (navigator.vibrate) {
+        navigator.vibrate([20, 10, 20]);
+    }
+    
+    // Auto-hide the popup after a certain time
+    if (popupAutoHideTimeout) clearTimeout(popupAutoHideTimeout);
+    popupAutoHideTimeout = setTimeout(() => {
+        hidePortfolioPopup();
+    }, POPUP_AUTO_HIDE_TIME);
+}
+
+function hidePortfolioPopup() {
+    portfolioPopup.classList.remove('active');
+    popupOverlay.classList.remove('active');
+    
+    if (popupAutoHideTimeout) {
+        clearTimeout(popupAutoHideTimeout);
+        popupAutoHideTimeout = null;
+    }
+}
+
+// Enhanced page load with delay
+window.addEventListener('load', () => {
+    if (popupTimeout) clearTimeout(popupTimeout);
+    
+    // Only show popup if user is engaged enough
+    popupTimeout = setTimeout(() => {
+        if (hasUserInteracted || window.innerWidth > 768) {
+            showPortfolioPopup();
+        }
+    }, POPUP_SHOW_DELAY);
+});
+
+// Close popup with close button
+if (popupClose) {
+    popupClose.addEventListener('click', (e) => {
+        e.stopPropagation();
+        hidePortfolioPopup();
+    });
+}
+
+// Close popup with overlay
+if (popupOverlay) {
+    popupOverlay.addEventListener('click', () => {
+        hidePortfolioPopup();
+    });
+}
+
+// Prevent closing when clicking inside popup
+if (portfolioPopup) {
+    portfolioPopup.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+}
+
+// Enhanced button interactions
+popupButtons.forEach((btn) => {
+    // Ripple effect
+    btn.addEventListener('mousedown', (e) => {
+        const ripple = btn.querySelector('.btn-ripple');
+        if (ripple) {
+            const rect = btn.getBoundingClientRect();
+            ripple.style.left = (e.clientX - rect.left) + 'px';
+            ripple.style.top = (e.clientY - rect.top) + 'px';
+        }
+    });
+
+    // Touch ripple for mobile
+    btn.addEventListener('touchstart', (e) => {
+        const ripple = btn.querySelector('.btn-ripple');
+        if (ripple && e.touches.length > 0) {
+            const touch = e.touches[0];
+            const rect = btn.getBoundingClientRect();
+            ripple.style.left = (touch.clientX - rect.left) + 'px';
+            ripple.style.top = (touch.clientY - rect.top) + 'px';
+        }
+    });
+
+    // Auto-hide popup when button is clicked
+    btn.addEventListener('click', () => {
+        setTimeout(hidePortfolioPopup, 300);
+    });
+
+    // Scale effect on button hover
+    btn.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-3px)';
+    });
+
+    btn.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+    });
+});
+
+// Scroll-based popup trigger
+let lastScrollPosition = 0;
+let scrollShowTriggered = false;
+
+window.addEventListener('scroll', () => {
+    const scrollPosition = window.innerHeight + window.scrollY;
+    const documentHeight = document.documentElement.scrollHeight;
+    
+    // If user scrolls near bottom and popup hasn't been shown
+    if (scrollPosition > documentHeight - 600 && !popupShown && !scrollShowTriggered) {
+        scrollShowTriggered = true;
+        // Small delay to avoid immediate show on load
+        setTimeout(() => {
+            if (!popupShown) {
+                showPortfolioPopup();
+            }
+        }, 400);
+    }
+    
+    lastScrollPosition = scrollPosition;
+}, { passive: true });
+
+// Handle keyboard interactions
+document.addEventListener('keydown', (e) => {
+    // Press 'Escape' to close popup
+    if (e.key === 'Escape' && popupShown) {
+        hidePortfolioPopup();
+    }
+});
+
+// Cleanup on page unload
+window.addEventListener('beforeunload', () => {
+    if (popupTimeout) clearTimeout(popupTimeout);
+    if (popupAutoHideTimeout) clearTimeout(popupAutoHideTimeout);
+});
+
+// Show popup on manual trigger (optional)
+window.showPortfolioPopup = showPortfolioPopup;
+window.hidePortfolioPopup = hidePortfolioPopup;
+
+// Enhanced mobile interaction
+if (window.innerWidth <= 640) {
+    // Show popup faster on mobile
+    const mobilePopupTimeout = setTimeout(() => {
+        if (!popupShown) {
+            showPortfolioPopup();
+        }
+    }, 3500);
+}
 
 function setLinkState(anchor, href) {
     if (!anchor) return;
