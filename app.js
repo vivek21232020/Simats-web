@@ -628,6 +628,13 @@ if (getStartedBtn) {
     });
 }
 
+document.querySelectorAll('.hero-stats .stat-pill[data-target]').forEach((pill) => {
+    pill.addEventListener('click', () => {
+        const target = pill.dataset.target;
+        switchSection(target);
+    });
+});
+
 /* ══════════════════════════════════════
    CGPA CALCULATOR
    Grade points: S=10, A=9, B=8, C=7, D=6, E=5
