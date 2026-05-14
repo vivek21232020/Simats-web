@@ -2485,6 +2485,21 @@ input[type="number"]:focus {
     .action-buttons { gap: 8px; }
     .bnav-btn span { font-size: 0.56rem; }
 
+    .faculty-shell { gap: 0.6rem; }
+    .faculty-toolbar { gap: 10px; }
+    .faculty-search-wrap { flex: 1 1 100%; }
+    .faculty-search-wrap input { padding: 11px 14px 11px 38px; font-size: 0.9rem; }
+    .faculty-count { padding: 8px 12px; font-size: 0.76rem; }
+    .faculty-list { grid-template-columns: 1fr; gap: 10px; margin-top: 0; }
+    .faculty-card { padding: 13px; gap: 10px; }
+    .faculty-badge { width: 44px; height: 44px; }
+    .faculty-text h3 { font-size: 0.95rem; }
+    .faculty-text p { font-size: 0.8rem; margin-top: 3px; }
+    .faculty-action { padding: 10px 10px; font-size: 0.76rem; }
+    .faculty-empty { padding: 0.8rem 0; }
+    .faculty-empty h3 { font-size: 1rem; margin-bottom: 5px; }
+    .faculty-empty p { font-size: 0.82rem; }
+
     .portfolio-popup {
         width: calc(100vw - 32px);
         max-width: 420px;
@@ -2712,9 +2727,13 @@ input[type="number"]:focus {
     .full-width { width: 100%; }
     .bnav-btn span { font-size: 0.58rem; }
     .bnav-btn i { font-size: 1rem; }
-    .faculty-toolbar { flex-direction: column; align-items: stretch; }
-    .faculty-count { width: fit-content; }
-    .faculty-list { grid-template-columns: 1fr; }
+    .faculty-toolbar { flex-direction: column; align-items: stretch; gap: 10px; }
+    .faculty-search-wrap { flex: 1 1 100%; }
+    .faculty-count { width: fit-content; align-self: flex-start; }
+    .faculty-list { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .faculty-shell { gap: 0.8rem; }
+    .faculty-card { padding: 14px; }
+    .faculty-actions { flex-direction: column; }
     .faculty-actions { flex-direction: column; }
 }
 
