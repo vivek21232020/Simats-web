@@ -2459,6 +2459,32 @@ input[type="number"]:focus {
 
 /* Premium Mobile Responsiveness */
 @media (max-width: 640px) {
+    .app-container { padding: 72px 0.85rem 86px; }
+    .gradient-text { font-size: 1.55rem; line-height: 1.08; }
+    .subtitle { font-size: 0.88rem; line-height: 1.5; }
+    .hero-badge { padding: 5px 12px; font-size: 0.72rem; }
+    .hero-card { padding: 1rem !important; }
+    .hero-content { gap: 0.6rem; }
+    .hero-stats { padding: 7px 8px; }
+    .stat-pill { font-size: 0.72rem; padding: 0 6px; }
+    .feat-card { padding: 11px 12px; gap: 10px; }
+    .feat-icon { width: 36px; height: 36px; font-size: 0.98rem; }
+    .feat-arrow { font-size: 0.7rem; }
+    .glass-card { padding: 1.05rem; }
+    .section-header { gap: 10px; margin-bottom: 0.95rem; }
+    .section-title { font-size: 1.15rem; }
+    .section-sub { font-size: 0.75rem; }
+    .card-header { gap: 10px; margin-bottom: 0.95rem; }
+    .card-header h3 { font-size: 0.98rem; }
+    .card-header p { font-size: 0.76rem; }
+    .input-container { gap: 0.85rem; margin-bottom: 1rem; }
+    .grade-grid { gap: 0.7rem; margin-bottom: 1rem; }
+    .grade-input-box { padding: 9px; }
+    .grade-label { font-size: 0.8rem; gap: 6px; }
+    .grade-label .sub-text { font-size: 0.72rem; }
+    .action-buttons { gap: 8px; }
+    .bnav-btn span { font-size: 0.56rem; }
+
     .portfolio-popup {
         width: calc(100vw - 32px);
         max-width: 420px;
@@ -2656,17 +2682,34 @@ input[type="number"]:focus {
     .grade-grid { grid-template-columns: 1fr; }
     .gradient-text { font-size: 1.8rem; }
     .hero-logo.static-logo { width: 180px; }
-    .hero-card { height: auto; min-height: calc(100svh - 168px); padding: 1.4rem !important; }
-    .hero-content { gap: 0.9rem; }
-    .hero-feature-label { font-size: 0.68rem; letter-spacing: 0.14em; }
-    .feature-cards { flex-direction: column; gap: 10px; }
-    .feat-card { width: 100%; flex-basis: auto; }
-    .hero-stats { flex-wrap: wrap; justify-content: center; gap: 6px; border-radius: 18px; padding: 10px 12px; width: 100%; }
+    .hero-card { height: auto; min-height: auto; padding: 1.2rem !important; }
+    .hero-content { gap: 0.7rem; }
+    .hero-feature-label { font-size: 0.66rem; letter-spacing: 0.12em; padding: 6px 12px; }
+    .feature-cards { flex-direction: column; gap: 8px; }
+    .feat-card { width: 100%; flex-basis: auto; padding: 12px 14px; }
+    .feat-text strong { font-size: 0.84rem; }
+    .feat-text span { line-height: 1.25; }
+    .hero-stats { flex-wrap: wrap; justify-content: center; gap: 4px; border-radius: 18px; padding: 8px 10px; width: 100%; }
+    .stat-pill { padding: 0 8px; font-size: 0.76rem; }
     .stat-divider { display: none; }
     .hero-ring { display: none; }
     .huge-result { font-size: 4rem; }
-    .split-layout { gap: 1.2rem; }
-    .glass-card { padding: 1.6rem; border-radius: var(--radius-lg); }
+    .split-layout { gap: 1rem; }
+    .section-header { gap: 12px; margin-bottom: 1.1rem; }
+    .section-title { font-size: 1.25rem; }
+    .section-sub { font-size: 0.8rem; line-height: 1.35; }
+    .glass-card { padding: 1.25rem; border-radius: var(--radius-lg); }
+    .card-header { gap: 12px; margin-bottom: 1.1rem; }
+    .card-header h3 { font-size: 1.05rem; }
+    .card-header p { font-size: 0.8rem; line-height: 1.35; }
+    .input-container { gap: 1rem; margin-bottom: 1.25rem; }
+    .grade-grid { gap: 0.8rem; margin-bottom: 1.2rem; }
+    .grade-input-box { padding: 10px; }
+    .input-group label { margin-bottom: 5px; font-size: 0.82rem; }
+    .action-buttons { flex-direction: column; gap: 10px; }
+    .action-buttons .btn,
+    .download-actions .btn,
+    .full-width { width: 100%; }
     .bnav-btn span { font-size: 0.58rem; }
     .bnav-btn i { font-size: 1rem; }
     .faculty-toolbar { flex-direction: column; align-items: stretch; }
