@@ -628,9 +628,9 @@ if (getStartedBtn) {
     });
 }
 
-document.querySelectorAll('.hero-stats .stat-pill[data-target]').forEach((pill) => {
-    pill.addEventListener('click', () => {
-        const target = pill.dataset.target;
+document.querySelectorAll('.hero-stats .stat-pill[data-target], .feat-card[data-target]').forEach((el) => {
+    el.addEventListener('click', () => {
+        const target = el.dataset.target;
         switchSection(target);
     });
 });
