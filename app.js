@@ -71,19 +71,48 @@ function renderParticles() {
 
 function startParticles() {
     if (!particleContext || prefersReducedMotion) return;
+    // Disable particles on small screens to improve mobile performance
+    if (window.innerWidth < 769) {
+        stopParticles();
+        return;
+    }
     resizeParticleCanvas();
     createParticles();
     if (particleFrameId) cancelAnimationFrame(particleFrameId);
     renderParticles();
 }
 
+function stopParticles() {
+    if (!particleContext) return;
+    if (particleFrameId) {
+        cancelAnimationFrame(particleFrameId);
+        particleFrameId = null;
+    }
+    try {
+        particleContext.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+    } catch (e) {
+        // ignore
+    }
+    particlePool = [];
+}
+
 window.addEventListener('resize', () => {
     if (!particleContext || prefersReducedMotion) return;
+    // On resize, decide whether to run particles depending on viewport
+    if (window.innerWidth < 769) {
+        stopParticles();
+        return;
+    }
     resizeParticleCanvas();
     createParticles();
 });
 
-startParticles();
+// Start particles only on sufficiently large viewports
+if (!(prefersReducedMotion) && window.innerWidth >= 769) {
+    startParticles();
+} else {
+    stopParticles();
+}
 
 /* ══════════════════════════════════════
    NAVIGATION
@@ -374,6 +403,7 @@ function closeSidebar() {
     sidebarWrapper.classList.remove('drawer-open');
     drawerOverlay.classList.remove('visible');
     if (hamburgerBtn) hamburgerBtn.classList.remove('open');
+    document.body.classList.remove('no-scroll');
 }
 
 function openSidebar() {
@@ -381,6 +411,7 @@ function openSidebar() {
     sidebarWrapper.classList.add('drawer-open');
     drawerOverlay.classList.add('visible');
     if (hamburgerBtn) hamburgerBtn.classList.add('open');
+    document.body.classList.add('no-scroll');
 }
 
 function toggleSidebar() {
@@ -393,12 +424,14 @@ function closeMoreDrawer() {
     if (!moreDrawer || !moreOverlay) return;
     moreDrawer.classList.remove('open');
     moreOverlay.classList.remove('visible');
+    document.body.classList.remove('no-scroll');
 }
 
 function openMoreDrawer() {
     if (!moreDrawer || !moreOverlay) return;
     moreDrawer.classList.add('open');
     moreOverlay.classList.add('visible');
+    document.body.classList.add('no-scroll');
 }
 
 function toggleMoreDrawer() {
@@ -633,6 +666,16 @@ document.querySelectorAll('.hero-stats .stat-pill[data-target], .feat-card[data-
         const target = el.dataset.target;
         switchSection(target);
     });
+    // make keyboard accessible
+    el.setAttribute('tabindex', '0');
+    el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            el.click();
+        }
+    });
+    el.addEventListener('focus', () => el.classList.add('focus-ring'));
+    el.addEventListener('blur', () => el.classList.remove('focus-ring'));
 });
 
 /* ══════════════════════════════════════
